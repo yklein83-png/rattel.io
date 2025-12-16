@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RATEL funding - Bientôt disponible</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-orange: #FF6B35;
+            --primary-dark: #1a1a2e;
+            --secondary-blue: #0F3460;
+            --accent: #E94560;
+            --pixel-dark: #2C2C2C;
+            --pixel-gray: #606060;
+            --pixel-light-gray: #909090;
+            --pixel-white: #E0E0E0;
+            --pixel-highlight: #FFFFFF;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--secondary-blue) 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Animated grid background */
+        body::before {
+            content: "";
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background-image: 
+                linear-gradient(rgba(255,107,53,0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,107,53,0.05) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: gridScroll 10s linear infinite;
+        }
+
+        @keyframes gridScroll {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+
+        .container {
+            text-align: center;
+            z-index: 1;
+            padding: 2rem;
+        }
+
+        /* Logo with glitch effect */
+        .logo {
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .logo-main {
+            font-size: 4.5rem;
+            font-weight: 900;
+            color: var(--primary-orange);
+            letter-spacing: -2px;
+            margin-bottom: -0.5rem;
+            display: block;
+            text-shadow: 
+                0 0 10px rgba(255, 107, 53, 0.5),
+                0 0 20px rgba(255, 107, 53, 0.3);
+            animation: glitch 3s infinite;
+        }
+
+        @keyframes glitch {
+            0%, 100% { text-shadow: 0 0 10px rgba(255, 107, 53, 0.5), 0 0 20px rgba(255, 107, 53, 0.3); }
+            20% { text-shadow: 2px 2px 0 rgba(0,255,255,0.8), -2px -2px 0 rgba(255,0,255,0.8); }
+            21% { text-shadow: 0 0 10px rgba(255, 107, 53, 0.5), 0 0 20px rgba(255, 107, 53, 0.3); }
+        }
+
+        .logo-sub {
+            font-size: 1rem;
+            font-weight: 300;
+            color: rgba(255, 255, 255, 0.7);
+            letter-spacing: 5px;
+            text-transform: uppercase;
+        }
+
+        /* Pixel Art Container */
+        .pixel-frame {
+            margin: 2rem auto;
+            padding: 2rem;
+            background: rgba(0,0,0,0.3);
+            border: 4px solid var(--primary-orange);
+            border-radius: 0;
+            box-shadow: 
+                0 0 0 1px #000,
+                0 0 0 5px rgba(255, 107, 53, 0.3),
+                0 0 30px rgba(255, 107, 53, 0.2);
+            position: relative;
+            image-rendering: pixelated;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: crisp-edges;
+        }
+
+        .pixel-frame::before,
+        .pixel-frame::after {
+            content: '';
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: var(--primary-orange);
+        }
+
+        .pixel-frame::before {
+            top: -7px;
+            left: -7px;
+        }
+
+        .pixel-frame::after {
+            bottom: -7px;
+            right: -7px;
+        }
+
+        /* Pixel Art Ratel */
+        .ratel-container {
+            width: 320px;
+            height: 420px;
+            margin: 0 auto;
+            position: relative;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .pixel {
+            width: 10px;
+            height: 10px;
+            position: absolute;
+            transition: all 0.3s;
+        }
+
+        .pixel.black { background: #1a1a1a; }
+        .pixel.white { background: #f0f0f0; }
+        .pixel.gray { background: #808080; }
+        .pixel.lightgray { background: #b0b0b0; }
+        .pixel.darkgray { background: #404040; }
+        .pixel.eye { 
+            background: #000;
+            animation: blink 5s infinite;
+        }
+
+        @keyframes blink {
+            0%, 90%, 100% { opacity: 1; }
+            92%, 98% { opacity: 0; }
+        }
+
+        /* Loading animation */
+        .loading-container {
+            margin: 2rem auto;
+            width: 320px;
+        }
+
+        .loading-bar-bg {
+            background: rgba(255,255,255,0.1);
+            height: 10px;
+            border-radius: 0;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .loading-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-orange) 0%, var(--accent) 100%);
+            animation: loading 3s ease-in-out infinite;
+        }
+
+        @keyframes loading {
+            0% { width: 0%; }
+            50% { width: 85%; }
+            100% { width: 0%; }
+        }
+
+        .loading-text {
+            color: rgba(255,255,255,0.9);
+            margin-top: 1rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+        }
+
+        /* Message */
+        .message {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.1rem;
+            margin-top: 2rem;
+            line-height: 1.8;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        .highlight {
+            color: var(--primary-orange);
+            font-weight: bold;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        /* CTA button */
+        .cta-early {
+            margin-top: 2rem;
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            background: linear-gradient(135deg, var(--primary-orange), var(--accent));
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: bold;
+            transition: all 0.3s;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        .cta-early:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(255, 107, 53, 0.4);
+        }
+
+        /* Footer */
+        .footer {
+            position: absolute;
+            bottom: 1.5rem;
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 0.85rem;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .logo-main { font-size: 3rem; }
+            .ratel-container { 
+                width: 240px; 
+                height: 320px;
+                transform: scale(0.75);
+            }
+            .loading-container { width: 280px; }
+            .message { font-size: 1rem; padding: 0 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <span class="logo-main">RATEL</span>
+            <span class="logo-sub">funding</span>
+        </div>
+
+        <div class="pixel-frame">
+            <div class="ratel-container" id="ratel"></div>
+        </div>
+
+        <div class="loading-container">
+            <div class="loading-bar-bg">
+                <div class="loading-bar"></div>
+            </div>
+            <div class="loading-text">
+                INITIALISATION<span id="dots">...</span>
+            </div>
+        </div>
+
+        <div class="message">
+            La première plateforme de financement participatif<br>
+            <span class="highlight">100% Nouvelle-Calédonie</span><br>
+            arrive très bientôt
+        </div>
+
+        <a href="#" class="cta-early">Préinscription</a>
+    </div>
+
+    <div class="footer">
+        © 2025 RATEL funding - Nouvelle-Calédonie
+    </div>
+
+    <script>
+        // Enhanced Pixel Art Ratel Design
+        const ratelPixels = [
+            // Row 0-4: Ears and top of head
+            {x:11, y:0, c:'black'}, {x:12, y:0, c:'black'}, {x:21, y:0, c:'black'}, {x:22, y:0, c:'black'},
+            {x:10, y:1, c:'black'}, {x:11, y:1, c:'darkgray'}, {x:12, y:1, c:'darkgray'}, {x:13, y:1, c:'black'}, {x:20, y:1, c:'black'}, {x:21, y:1, c:'darkgray'}, {x:22, y:1, c:'darkgray'}, {x:23, y:1, c:'black'},
+            {x:10, y:2, c:'black'}, {x:11, y:2, c:'darkgray'}, {x:12, y:2, c:'darkgray'}, {x:13, y:2, c:'black'}, {x:14, y:2, c:'black'}, {x:15, y:2, c:'black'}, {x:16, y:2, c:'black'}, {x:17, y:2, c:'black'}, {x:18, y:2, c:'black'}, {x:19, y:2, c:'black'}, {x:20, y:2, c:'black'}, {x:21, y:2, c:'darkgray'}, {x:22, y:2, c:'darkgray'}, {x:23, y:2, c:'black'},
+            
+            // Row 3-6: Head with white stripe beginning
+            {x:9, y:3, c:'black'}, {x:10, y:3, c:'white'}, {x:11, y:3, c:'white'}, {x:12, y:3, c:'white'}, {x:13, y:3, c:'white'}, {x:14, y:3, c:'white'}, {x:15, y:3, c:'white'}, {x:16, y:3, c:'white'}, {x:17, y:3, c:'white'}, {x:18, y:3, c:'white'}, {x:19, y:3, c:'white'}, {x:20, y:3, c:'white'}, {x:21, y:3, c:'white'}, {x:22, y:3, c:'white'}, {x:23, y:3, c:'white'}, {x:24, y:3, c:'black'},
+            
+            {x:8, y:4, c:'black'}, {x:9, y:4, c:'white'}, {x:10, y:4, c:'white'}, {x:11, y:4, c:'white'}, {x:12, y:4, c:'white'}, {x:13, y:4, c:'white'}, {x:14, y:4, c:'white'}, {x:15, y:4, c:'white'}, {x:16, y:4, c:'white'}, {x:17, y:4, c:'white'}, {x:18, y:4, c:'white'}, {x:19, y:4, c:'white'}, {x:20, y:4, c:'white'}, {x:21, y:4, c:'white'}, {x:22, y:4, c:'white'}, {x:23, y:4, c:'white'}, {x:24, y:4, c:'white'}, {x:25, y:4, c:'black'},
+            
+            // Row 5-6: Eyes and snout
+            {x:7, y:5, c:'black'}, {x:8, y:5, c:'white'}, {x:9, y:5, c:'white'}, {x:10, y:5, c:'white'}, {x:11, y:5, c:'white'}, {x:12, y:5, c:'eye'}, {x:13, y:5, c:'white'}, {x:14, y:5, c:'white'}, {x:15, y:5, c:'white'}, {x:16, y:5, c:'white'}, {x:17, y:5, c:'white'}, {x:18, y:5, c:'white'}, {x:19, y:5, c:'white'}, {x:20, y:5, c:'eye'}, {x:21, y:5, c:'white'}, {x:22, y:5, c:'white'}, {x:23, y:5, c:'white'}, {x:24, y:5, c:'white'}, {x:25, y:5, c:'white'}, {x:26, y:5, c:'black'},
+            
+            {x:6, y:6, c:'black'}, {x:7, y:6, c:'white'}, {x:8, y:6, c:'white'}, {x:9, y:6, c:'white'}, {x:10, y:6, c:'white'}, {x:11, y:6, c:'white'}, {x:12, y:6, c:'white'}, {x:13, y:6, c:'white'}, {x:14, y:6, c:'white'}, {x:15, y:6, c:'black'}, {x:16, y:6, c:'black'}, {x:17, y:6, c:'white'}, {x:18, y:6, c:'white'}, {x:19, y:6, c:'white'}, {x:20, y:6, c:'white'}, {x:21, y:6, c:'white'}, {x:22, y:6, c:'white'}, {x:23, y:6, c:'white'}, {x:24, y:6, c:'white'}, {x:25, y:6, c:'white'}, {x:26, y:6, c:'white'}, {x:27, y:6, c:'black'},
+            
+            // Row 7-12: White stripe on back
+            {x:5, y:7, c:'black'}, {x:6, y:7, c:'white'}, {x:7, y:7, c:'white'}, {x:8, y:7, c:'white'}, {x:9, y:7, c:'white'}, {x:10, y:7, c:'white'}, {x:11, y:7, c:'white'}, {x:12, y:7, c:'white'}, {x:13, y:7, c:'white'}, {x:14, y:7, c:'white'}, {x:15, y:7, c:'white'}, {x:16, y:7, c:'white'}, {x:17, y:7, c:'white'}, {x:18, y:7, c:'white'}, {x:19, y:7, c:'white'}, {x:20, y:7, c:'white'}, {x:21, y:7, c:'white'}, {x:22, y:7, c:'white'}, {x:23, y:7, c:'white'}, {x:24, y:7, c:'white'}, {x:25, y:7, c:'white'}, {x:26, y:7, c:'white'}, {x:27, y:7, c:'white'}, {x:28, y:7, c:'black'},
+            
+            {x:4, y:8, c:'black'}, {x:5, y:8, c:'white'}, {x:6, y:8, c:'white'}, {x:7, y:8, c:'white'}, {x:8, y:8, c:'white'}, {x:9, y:8, c:'white'}, {x:10, y:8, c:'white'}, {x:11, y:8, c:'white'}, {x:12, y:8, c:'white'}, {x:13, y:8, c:'white'}, {x:14, y:8, c:'white'}, {x:15, y:8, c:'white'}, {x:16, y:8, c:'white'}, {x:17, y:8, c:'white'}, {x:18, y:8, c:'white'}, {x:19, y:8, c:'white'}, {x:20, y:8, c:'white'}, {x:21, y:8, c:'white'}, {x:22, y:8, c:'white'}, {x:23, y:8, c:'white'}, {x:24, y:8, c:'white'}, {x:25, y:8, c:'white'}, {x:26, y:8, c:'white'}, {x:27, y:8, c:'white'}, {x:28, y:8, c:'white'}, {x:29, y:8, c:'black'},
+            
+            {x:3, y:9, c:'black'}, {x:4, y:9, c:'white'}, {x:5, y:9, c:'white'}, {x:6, y:9, c:'white'}, {x:7, y:9, c:'white'}, {x:8, y:9, c:'white'}, {x:9, y:9, c:'white'}, {x:10, y:9, c:'white'}, {x:11, y:9, c:'white'}, {x:12, y:9, c:'white'}, {x:13, y:9, c:'white'}, {x:14, y:9, c:'white'}, {x:15, y:9, c:'white'}, {x:16, y:9, c:'white'}, {x:17, y:9, c:'white'}, {x:18, y:9, c:'white'}, {x:19, y:9, c:'white'}, {x:20, y:9, c:'white'}, {x:21, y:9, c:'white'}, {x:22, y:9, c:'white'}, {x:23, y:9, c:'white'}, {x:24, y:9, c:'white'}, {x:25, y:9, c:'white'}, {x:26, y:9, c:'white'}, {x:27, y:9, c:'white'}, {x:28, y:9, c:'white'}, {x:29, y:9, c:'white'}, {x:30, y:9, c:'black'},
+            
+            {x:2, y:10, c:'black'}, {x:3, y:10, c:'white'}, {x:4, y:10, c:'white'}, {x:5, y:10, c:'white'}, {x:6, y:10, c:'white'}, {x:7, y:10, c:'white'}, {x:8, y:10, c:'white'}, {x:9, y:10, c:'white'}, {x:10, y:10, c:'white'}, {x:11, y:10, c:'white'}, {x:12, y:10, c:'white'}, {x:13, y:10, c:'white'}, {x:14, y:10, c:'white'}, {x:15, y:10, c:'white'}, {x:16, y:10, c:'white'}, {x:17, y:10, c:'white'}, {x:18, y:10, c:'white'}, {x:19, y:10, c:'white'}, {x:20, y:10, c:'white'}, {x:21, y:10, c:'white'}, {x:22, y:10, c:'white'}, {x:23, y:10, c:'white'}, {x:24, y:10, c:'white'}, {x:25, y:10, c:'white'}, {x:26, y:10, c:'white'}, {x:27, y:10, c:'white'}, {x:28, y:10, c:'white'}, {x:29, y:10, c:'white'}, {x:30, y:10, c:'white'}, {x:31, y:10, c:'black'},
+            
+            {x:2, y:11, c:'black'}, {x:3, y:11, c:'white'}, {x:4, y:11, c:'white'}, {x:5, y:11, c:'white'}, {x:6, y:11, c:'white'}, {x:7, y:11, c:'white'}, {x:8, y:11, c:'white'}, {x:9, y:11, c:'white'}, {x:10, y:11, c:'white'}, {x:11, y:11, c:'white'}, {x:12, y:11, c:'white'}, {x:13, y:11, c:'white'}, {x:14, y:11, c:'white'}, {x:15, y:11, c:'white'}, {x:16, y:11, c:'white'}, {x:17, y:11, c:'white'}, {x:18, y:11, c:'white'}, {x:19, y:11, c:'white'}, {x:20, y:11, c:'white'}, {x:21, y:11, c:'white'}, {x:22, y:11, c:'white'}, {x:23, y:11, c:'white'}, {x:24, y:11, c:'white'}, {x:25, y:11, c:'white'}, {x:26, y:11, c:'white'}, {x:27, y:11, c:'white'}, {x:28, y:11, c:'white'}, {x:29, y:11, c:'white'}, {x:30, y:11, c:'white'}, {x:31, y:11, c:'black'},
+            
+            {x:2, y:12, c:'black'}, {x:3, y:12, c:'lightgray'}, {x:4, y:12, c:'lightgray'}, {x:5, y:12, c:'lightgray'}, {x:6, y:12, c:'lightgray'}, {x:7, y:12, c:'lightgray'}, {x:8, y:12, c:'lightgray'}, {x:9, y:12, c:'lightgray'}, {x:10, y:12, c:'lightgray'}, {x:11, y:12, c:'lightgray'}, {x:12, y:12, c:'lightgray'}, {x:13, y:12, c:'lightgray'}, {x:14, y:12, c:'lightgray'}, {x:15, y:12, c:'lightgray'}, {x:16, y:12, c:'lightgray'}, {x:17, y:12, c:'lightgray'}, {x:18, y:12, c:'lightgray'}, {x:19, y:12, c:'lightgray'}, {x:20, y:12, c:'lightgray'}, {x:21, y:12, c:'lightgray'}, {x:22, y:12, c:'lightgray'}, {x:23, y:12, c:'lightgray'}, {x:24, y:12, c:'lightgray'}, {x:25, y:12, c:'lightgray'}, {x:26, y:12, c:'lightgray'}, {x:27, y:12, c:'lightgray'}, {x:28, y:12, c:'lightgray'}, {x:29, y:12, c:'lightgray'}, {x:30, y:12, c:'lightgray'}, {x:31, y:12, c:'black'},
+            
+            // Row 13-25: Transition to black body
+            {x:2, y:13, c:'black'}, {x:3, y:13, c:'gray'}, {x:4, y:13, c:'gray'}, {x:5, y:13, c:'gray'}, {x:6, y:13, c:'gray'}, {x:7, y:13, c:'gray'}, {x:8, y:13, c:'gray'}, {x:9, y:13, c:'gray'}, {x:10, y:13, c:'gray'}, {x:11, y:13, c:'gray'}, {x:12, y:13, c:'gray'}, {x:13, y:13, c:'gray'}, {x:14, y:13, c:'gray'}, {x:15, y:13, c:'gray'}, {x:16, y:13, c:'gray'}, {x:17, y:13, c:'gray'}, {x:18, y:13, c:'gray'}, {x:19, y:13, c:'gray'}, {x:20, y:13, c:'gray'}, {x:21, y:13, c:'gray'}, {x:22, y:13, c:'gray'}, {x:23, y:13, c:'gray'}, {x:24, y:13, c:'gray'}, {x:25, y:13, c:'gray'}, {x:26, y:13, c:'gray'}, {x:27, y:13, c:'gray'}, {x:28, y:13, c:'gray'}, {x:29, y:13, c:'gray'}, {x:30, y:13, c:'gray'}, {x:31, y:13, c:'black'},
+            
+            {x:3, y:14, c:'black'}, {x:4, y:14, c:'darkgray'}, {x:5, y:14, c:'darkgray'}, {x:6, y:14, c:'darkgray'}, {x:7, y:14, c:'darkgray'}, {x:8, y:14, c:'darkgray'}, {x:9, y:14, c:'darkgray'}, {x:10, y:14, c:'darkgray'}, {x:11, y:14, c:'darkgray'}, {x:12, y:14, c:'darkgray'}, {x:13, y:14, c:'darkgray'}, {x:14, y:14, c:'darkgray'}, {x:15, y:14, c:'darkgray'}, {x:16, y:14, c:'darkgray'}, {x:17, y:14, c:'darkgray'}, {x:18, y:14, c:'darkgray'}, {x:19, y:14, c:'darkgray'}, {x:20, y:14, c:'darkgray'}, {x:21, y:14, c:'darkgray'}, {x:22, y:14, c:'darkgray'}, {x:23, y:14, c:'darkgray'}, {x:24, y:14, c:'darkgray'}, {x:25, y:14, c:'darkgray'}, {x:26, y:14, c:'darkgray'}, {x:27, y:14, c:'darkgray'}, {x:28, y:14, c:'darkgray'}, {x:29, y:14, c:'darkgray'}, {x:30, y:14, c:'black'},
+            
+            // Row 15-20: Black body
+            {x:3, y:15, c:'black'}, {x:4, y:15, c:'black'}, {x:5, y:15, c:'black'}, {x:6, y:15, c:'black'}, {x:7, y:15, c:'black'}, {x:8, y:15, c:'black'}, {x:9, y:15, c:'black'}, {x:10, y:15, c:'black'}, {x:11, y:15, c:'black'}, {x:12, y:15, c:'black'}, {x:13, y:15, c:'black'}, {x:14, y:15, c:'black'}, {x:15, y:15, c:'black'}, {x:16, y:15, c:'black'}, {x:17, y:15, c:'black'}, {x:18, y:15, c:'black'}, {x:19, y:15, c:'black'}, {x:20, y:15, c:'black'}, {x:21, y:15, c:'black'}, {x:22, y:15, c:'black'}, {x:23, y:15, c:'black'}, {x:24, y:15, c:'black'}, {x:25, y:15, c:'black'}, {x:26, y:15, c:'black'}, {x:27, y:15, c:'black'}, {x:28, y:15, c:'black'}, {x:29, y:15, c:'black'}, {x:30, y:15, c:'black'},
+            
+            {x:4, y:16, c:'black'}, {x:5, y:16, c:'black'}, {x:6, y:16, c:'black'}, {x:7, y:16, c:'black'}, {x:8, y:16, c:'black'}, {x:9, y:16, c:'black'}, {x:10, y:16, c:'black'}, {x:11, y:16, c:'black'}, {x:12, y:16, c:'black'}, {x:13, y:16, c:'black'}, {x:14, y:16, c:'black'}, {x:15, y:16, c:'black'}, {x:16, y:16, c:'black'}, {x:17, y:16, c:'black'}, {x:18, y:16, c:'black'}, {x:19, y:16, c:'black'}, {x:20, y:16, c:'black'}, {x:21, y:16, c:'black'}, {x:22, y:16, c:'black'}, {x:23, y:16, c:'black'}, {x:24, y:16, c:'black'}, {x:25, y:16, c:'black'}, {x:26, y:16, c:'black'}, {x:27, y:16, c:'black'}, {x:28, y:16, c:'black'}, {x:29, y:16, c:'black'},
+            
+            {x:5, y:17, c:'black'}, {x:6, y:17, c:'black'}, {x:7, y:17, c:'black'}, {x:8, y:17, c:'black'}, {x:9, y:17, c:'black'}, {x:10, y:17, c:'black'}, {x:11, y:17, c:'black'}, {x:12, y:17, c:'black'}, {x:13, y:17, c:'black'}, {x:14, y:17, c:'black'}, {x:15, y:17, c:'black'}, {x:16, y:17, c:'black'}, {x:17, y:17, c:'black'}, {x:18, y:17, c:'black'}, {x:19, y:17, c:'black'}, {x:20, y:17, c:'black'}, {x:21, y:17, c:'black'}, {x:22, y:17, c:'black'}, {x:23, y:17, c:'black'}, {x:24, y:17, c:'black'}, {x:25, y:17, c:'black'}, {x:26, y:17, c:'black'}, {x:27, y:17, c:'black'}, {x:28, y:17, c:'black'},
+            
+            {x:6, y:18, c:'black'}, {x:7, y:18, c:'black'}, {x:8, y:18, c:'black'}, {x:9, y:18, c:'black'}, {x:10, y:18, c:'black'}, {x:11, y:18, c:'black'}, {x:12, y:18, c:'black'}, {x:13, y:18, c:'black'}, {x:14, y:18, c:'black'}, {x:15, y:18, c:'black'}, {x:16, y:18, c:'black'}, {x:17, y:18, c:'black'}, {x:18, y:18, c:'black'}, {x:19, y:18, c:'black'}, {x:20, y:18, c:'black'}, {x:21, y:18, c:'black'}, {x:22, y:18, c:'black'}, {x:23, y:18, c:'black'}, {x:24, y:18, c:'black'}, {x:25, y:18, c:'black'}, {x:26, y:18, c:'black'}, {x:27, y:18, c:'black'},
+            
+            {x:7, y:19, c:'black'}, {x:8, y:19, c:'black'}, {x:9, y:19, c:'black'}, {x:10, y:19, c:'black'}, {x:11, y:19, c:'black'}, {x:12, y:19, c:'black'}, {x:13, y:19, c:'black'}, {x:14, y:19, c:'black'}, {x:15, y:19, c:'black'}, {x:16, y:19, c:'black'}, {x:17, y:19, c:'black'}, {x:18, y:19, c:'black'}, {x:19, y:19, c:'black'}, {x:20, y:19, c:'black'}, {x:21, y:19, c:'black'}, {x:22, y:19, c:'black'}, {x:23, y:19, c:'black'}, {x:24, y:19, c:'black'}, {x:25, y:19, c:'black'}, {x:26, y:19, c:'black'},
+            
+            {x:8, y:20, c:'black'}, {x:9, y:20, c:'black'}, {x:10, y:20, c:'black'}, {x:11, y:20, c:'black'}, {x:12, y:20, c:'black'}, {x:13, y:20, c:'black'}, {x:14, y:20, c:'black'}, {x:15, y:20, c:'black'}, {x:16, y:20, c:'black'}, {x:17, y:20, c:'black'}, {x:18, y:20, c:'black'}, {x:19, y:20, c:'black'}, {x:20, y:20, c:'black'}, {x:21, y:20, c:'black'}, {x:22, y:20, c:'black'}, {x:23, y:20, c:'black'}, {x:24, y:20, c:'black'}, {x:25, y:20, c:'black'},
+            
+            // Row 21-30: Lower body and beginning of legs
+            {x:9, y:21, c:'black'}, {x:10, y:21, c:'black'}, {x:11, y:21, c:'black'}, {x:12, y:21, c:'black'}, {x:13, y:21, c:'black'}, {x:14, y:21, c:'black'}, {x:15, y:21, c:'black'}, {x:16, y:21, c:'black'}, {x:17, y:21, c:'black'}, {x:18, y:21, c:'black'}, {x:19, y:21, c:'black'}, {x:20, y:21, c:'black'}, {x:21, y:21, c:'black'}, {x:22, y:21, c:'black'}, {x:23, y:21, c:'black'}, {x:24, y:21, c:'black'},
+            
+            {x:10, y:22, c:'black'}, {x:11, y:22, c:'black'}, {x:12, y:22, c:'black'}, {x:13, y:22, c:'black'}, {x:14, y:22, c:'black'}, {x:15, y:22, c:'black'}, {x:16, y:22, c:'black'}, {x:17, y:22, c:'black'}, {x:18, y:22, c:'black'}, {x:19, y:22, c:'black'}, {x:20, y:22, c:'black'}, {x:21, y:22, c:'black'}, {x:22, y:22, c:'black'}, {x:23, y:22, c:'black'},
+            
+            {x:11, y:23, c:'black'}, {x:12, y:23, c:'black'}, {x:13, y:23, c:'black'}, {x:14, y:23, c:'black'}, {x:15, y:23, c:'black'}, {x:16, y:23, c:'black'}, {x:17, y:23, c:'black'}, {x:18, y:23, c:'black'}, {x:19, y:23, c:'black'}, {x:20, y:23, c:'black'}, {x:21, y:23, c:'black'}, {x:22, y:23, c:'black'},
+            
+            {x:12, y:24, c:'black'}, {x:13, y:24, c:'black'}, {x:14, y:24, c:'black'}, {x:15, y:24, c:'black'}, {x:16, y:24, c:'black'}, {x:17, y:24, c:'black'}, {x:18, y:24, c:'black'}, {x:19, y:24, c:'black'}, {x:20, y:24, c:'black'}, {x:21, y:24, c:'black'},
+            
+            {x:13, y:25, c:'black'}, {x:14, y:25, c:'black'}, {x:15, y:25, c:'black'}, {x:16, y:25, c:'black'}, {x:17, y:25, c:'black'}, {x:18, y:25, c:'black'}, {x:19, y:25, c:'black'}, {x:20, y:25, c:'black'},
+            
+            // Legs - Front left
+            {x:9, y:26, c:'black'}, {x:10, y:26, c:'black'}, {x:11, y:26, c:'black'},
+            {x:9, y:27, c:'black'}, {x:10, y:27, c:'black'}, {x:11, y:27, c:'black'},
+            {x:9, y:28, c:'black'}, {x:10, y:28, c:'black'}, {x:11, y:28, c:'black'},
+            {x:9, y:29, c:'black'}, {x:10, y:29, c:'black'}, {x:11, y:29, c:'black'},
+            {x:9, y:30, c:'black'}, {x:10, y:30, c:'black'}, {x:11, y:30, c:'black'},
+            {x:8, y:31, c:'black'}, {x:9, y:31, c:'black'}, {x:10, y:31, c:'black'}, {x:11, y:31, c:'black'}, {x:12, y:31, c:'black'},
+            {x:8, y:32, c:'lightgray'}, {x:9, y:32, c:'lightgray'}, {x:10, y:32, c:'lightgray'}, {x:11, y:32, c:'lightgray'}, {x:12, y:32, c:'lightgray'},
+            
+            // Legs - Front right
+            {x:14, y:26, c:'black'}, {x:15, y:26, c:'black'}, {x:16, y:26, c:'black'},
+            {x:14, y:27, c:'black'}, {x:15, y:27, c:'black'}, {x:16, y:27, c:'black'},
+            {x:14, y:28, c:'black'}, {x:15, y:28, c:'black'}, {x:16, y:28, c:'black'},
+            {x:14, y:29, c:'black'}, {x:15, y:29, c:'black'}, {x:16, y:29, c:'black'},
+            {x:14, y:30, c:'black'}, {x:15, y:30, c:'black'}, {x:16, y:30, c:'black'},
+            {x:13, y:31, c:'black'}, {x:14, y:31, c:'black'}, {x:15, y:31, c:'black'}, {x:16, y:31, c:'black'}, {x:17, y:31, c:'black'},
+            {x:13, y:32, c:'lightgray'}, {x:14, y:32, c:'lightgray'}, {x:15, y:32, c:'lightgray'}, {x:16, y:32, c:'lightgray'}, {x:17, y:32, c:'lightgray'},
+            
+            // Legs - Back left
+            {x:17, y:26, c:'black'}, {x:18, y:26, c:'black'}, {x:19, y:26, c:'black'},
+            {x:17, y:27, c:'black'}, {x:18, y:27, c:'black'}, {x:19, y:27, c:'black'},
+            {x:17, y:28, c:'black'}, {x:18, y:28, c:'black'}, {x:19, y:28, c:'black'},
+            {x:17, y:29, c:'black'}, {x:18, y:29, c:'black'}, {x:19, y:29, c:'black'},
+            {x:17, y:30, c:'black'}, {x:18, y:30, c:'black'}, {x:19, y:30, c:'black'},
+            {x:16, y:31, c:'black'}, {x:17, y:31, c:'black'}, {x:18, y:31, c:'black'}, {x:19, y:31, c:'black'}, {x:20, y:31, c:'black'},
+            {x:16, y:32, c:'lightgray'}, {x:17, y:32, c:'lightgray'}, {x:18, y:32, c:'lightgray'}, {x:19, y:32, c:'lightgray'}, {x:20, y:32, c:'lightgray'},
+            
+            // Legs - Back right
+            {x:22, y:26, c:'black'}, {x:23, y:26, c:'black'}, {x:24, y:26, c:'black'},
+            {x:22, y:27, c:'black'}, {x:23, y:27, c:'black'}, {x:24, y:27, c:'black'},
+            {x:22, y:28, c:'black'}, {x:23, y:28, c:'black'}, {x:24, y:28, c:'black'},
+            {x:22, y:29, c:'black'}, {x:23, y:29, c:'black'}, {x:24, y:29, c:'black'},
+            {x:22, y:30, c:'black'}, {x:23, y:30, c:'black'}, {x:24, y:30, c:'black'},
+            {x:21, y:31, c:'black'}, {x:22, y:31, c:'black'}, {x:23, y:31, c:'black'}, {x:24, y:31, c:'black'}, {x:25, y:31, c:'black'},
+            {x:21, y:32, c:'lightgray'}, {x:22, y:32, c:'lightgray'}, {x:23, y:32, c:'lightgray'}, {x:24, y:32, c:'lightgray'}, {x:25, y:32, c:'lightgray'},
+        ];
+
+        const ratelContainer = document.getElementById('ratel');
+        
+        // Create and append pixels
+        ratelPixels.forEach(pixel => {
+            const pixelDiv = document.createElement('div');
+            pixelDiv.className = `pixel ${pixel.c}`;
+            pixelDiv.style.left = (pixel.x * 10) + 'px';
+            pixelDiv.style.top = (pixel.y * 10) + 'px';
+            ratelContainer.appendChild(pixelDiv);
+        });
+
+        // Animated dots
+        const dots = document.getElementById('dots');
+        let dotCount = 0;
+        setInterval(() => {
+            dotCount = (dotCount + 1) % 4;
+            dots.textContent = '.'.repeat(dotCount || 1);
+        }, 500);
+
+        // Random pixel glitter effect
+        setInterval(() => {
+            const pixels = document.querySelectorAll('.pixel.white, .pixel.lightgray');
+            if (pixels.length > 0) {
+                const randomPixel = pixels[Math.floor(Math.random() * pixels.length)];
+                randomPixel.style.filter = 'brightness(1.3)';
+                setTimeout(() => {
+                    randomPixel.style.filter = 'brightness(1)';
+                }, 200);
+            }
+        }, 2000);
+
+        // Interactive hover effect on ratel
+        const ratelFrame = document.querySelector('.pixel-frame');
+        ratelFrame.addEventListener('mouseenter', () => {
+            document.querySelectorAll('.pixel').forEach(pixel => {
+                pixel.style.transform = `translate(${Math.random() * 2 - 1}px, ${Math.random() * 2 - 1}px)`;
+            });
+        });
+        
+        ratelFrame.addEventListener('mouseleave', () => {
+            document.querySelectorAll('.pixel').forEach(pixel => {
+                pixel.style.transform = 'translate(0, 0)';
+            });
+        });
+    </script>
+</body>
+</html>

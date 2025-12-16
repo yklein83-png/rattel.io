@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CORE funding - Coming Soon</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-orange: #FF6B35;
+            --primary-dark: #1a1a2e;
+            --secondary-blue: #0F3460;
+            --accent: #E94560;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--secondary-blue) 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .container {
+            text-align: center;
+            z-index: 1;
+            padding: 2rem;
+            width: 100%;
+            max-width: 900px;
+        }
+
+        /* Logo */
+        .logo {
+            font-size: 4rem;
+            font-weight: 900;
+            color: var(--primary-orange);
+            text-shadow: 0 0 30px rgba(255, 107, 53, 0.4);
+            margin-bottom: 1rem;
+            letter-spacing: -2px;
+        }
+
+        .logo-sub {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.8);
+            letter-spacing: 6px;
+            margin-bottom: 3rem;
+        }
+
+        /* Game Area */
+        .game-container {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            border: 2px solid rgba(255, 107, 53, 0.3);
+        }
+
+        .game-screen {
+            width: 600px;
+            height: 200px;
+            background: #f7f7f7;
+            border-radius: 8px;
+            position: relative;
+            overflow: hidden;
+            margin: 0 auto;
+            image-rendering: pixelated;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: crisp-edges;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        /* Ground */
+        .ground {
+            position: absolute;
+            bottom: 0;
+            width: 200%;
+            height: 20px;
+            background: repeating-linear-gradient(
+                90deg,
+                #535353 0px,
+                #535353 80px,
+                #606060 80px,
+                #606060 160px
+            );
+            animation: moveGround 3s linear infinite;
+        }
+
+        @keyframes moveGround {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* Ratel Sprite */
+        .ratel {
+            position: absolute;
+            bottom: 20px;
+            left: 50px;
+            width: 60px;
+            height: 40px;
+            z-index: 10;
+        }
+
+        .ratel-sprite {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        /* Pixel blocks for the ratel */
+        .pixel {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+        }
+
+        /* Obstacles */
+        .obstacle {
+            position: absolute;
+            bottom: 20px;
+            width: 30px;
+            height: 40px;
+            background: #535353;
+            animation: moveObstacle 4s linear infinite;
+            border-radius: 2px;
+        }
+
+        .obstacle.cactus {
+            background: linear-gradient(to bottom, #2d5016, #3d6b1f);
+        }
+
+        @keyframes moveObstacle {
+            0% { right: -50px; }
+            100% { right: 650px; }
+        }
+
+        /* Clouds */
+        .cloud {
+            position: absolute;
+            background: #e0e0e0;
+            border-radius: 50px;
+            opacity: 0.7;
+            animation: moveCloud 20s linear infinite;
+        }
+
+        .cloud::before,
+        .cloud::after {
+            content: '';
+            position: absolute;
+            background: #e0e0e0;
+            border-radius: 50px;
+        }
+
+        .cloud1 {
+            width: 40px;
+            height: 15px;
+            top: 30px;
+            animation-duration: 25s;
+        }
+
+        .cloud1::before {
+            width: 20px;
+            height: 20px;
+            top: -10px;
+            left: 10px;
+        }
+
+        .cloud2 {
+            width: 30px;
+            height: 12px;
+            top: 50px;
+            animation-duration: 30s;
+            animation-delay: -5s;
+        }
+
+        @keyframes moveCloud {
+            0% { right: -60px; }
+            100% { right: 650px; }
+        }
+
+        /* Score */
+        .score {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 18px;
+            color: #535353;
+            font-weight: bold;
+        }
+
+        /* Message */
+        .message {
+            color: white;
+            font-size: 1.3rem;
+            margin-top: 2.5rem;
+            line-height: 1.8;
+        }
+
+        .highlight {
+            color: var(--primary-orange);
+            font-weight: bold;
+        }
+
+        /* CTA Button */
+        .cta-button {
+            display: inline-block;
+            margin-top: 2rem;
+            padding: 1rem 3rem;
+            background: linear-gradient(135deg, var(--primary-orange), var(--accent));
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s;
+            box-shadow: 0 10px 30px rgba(255, 107, 53, 0.3);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(255, 107, 53, 0.4);
+        }
+
+        /* Loading bar */
+        .loading-bar {
+            width: 300px;
+            height: 4px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 2px;
+            margin: 2rem auto 1rem;
+            overflow: hidden;
+        }
+
+        .loading-progress {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-orange), var(--accent));
+            animation: load 3s ease-in-out infinite;
+        }
+
+        @keyframes load {
+            0% { width: 0%; }
+            50% { width: 70%; }
+            100% { width: 100%; }
+        }
+
+        /* Responsive */
+        @media (max-width: 650px) {
+            .game-screen {
+                width: 90vw;
+                max-width: 400px;
+            }
+            
+            .logo {
+                font-size: 3rem;
+            }
+            
+            .message {
+                font-size: 1.1rem;
+                padding: 0 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="logo">CORE</h1>
+        <p class="logo-sub">FUNDING</p>
+        
+        <div class="game-container">
+            <div class="game-screen" id="gameScreen">
+                <!-- Score -->
+                <div class="score">SCORE: <span id="score">0000</span></div>
+                
+                <!-- Clouds -->
+                <div class="cloud cloud1"></div>
+                <div class="cloud cloud2"></div>
+                
+                <!-- Ratel -->
+                <div class="ratel" id="ratel">
+                    <div class="ratel-sprite" id="ratelSprite"></div>
+                </div>
+                
+                <!-- Ground -->
+                <div class="ground"></div>
+                
+                <!-- Obstacles will be added dynamically -->
+            </div>
+        </div>
+        
+        <div class="loading-bar">
+            <div class="loading-progress"></div>
+        </div>
+        
+        <div class="message">
+            La première plateforme de financement participatif<br>
+            <span class="highlight">100% Nouvelle-Calédonie</span><br>
+            arrive très bientôt
+        </div>
+        
+        <a href="#" class="cta-button" onclick="alert('🚀 Soyez parmi les premiers informés !'); return false;">
+            Me prévenir du lancement
+        </a>
+    </div>
+
+    <script>
+        // Ratel pixel art data (2 frames for running animation)
+        const ratelFrames = [
+            // Frame 1 - Running position 1
+            [
+                '      ████████    ',
+                '    ████████████  ',
+                '  ██████████████  ',
+                '  ████████████████',
+                '██████████████████',
+                '████▓▓▓▓▓▓████████',
+                '██▓▓░░▓▓▓▓░░▓▓████',
+                '██▓▓▓▓▓▓▓▓▓▓▓▓████',
+                '  ▓▓▓▓▓▓▓▓▓▓▓▓██  ',
+                '  ▓▓██    ██▓▓    ',
+            ],
+            // Frame 2 - Running position 2
+            [
+                '      ████████    ',
+                '    ████████████  ',
+                '  ██████████████  ',
+                '  ████████████████',
+                '██████████████████',
+                '████▓▓▓▓▓▓████████',
+                '██▓▓░░▓▓▓▓░░▓▓████',
+                '██▓▓▓▓▓▓▓▓▓▓▓▓████',
+                '  ▓▓▓▓▓▓▓▓▓▓▓▓██  ',
+                '  ██▓▓    ▓▓██    ',
+            ]
+        ];
+
+        const colorMap = {
+            '█': '#B8B0A0',  // Light gray (mantle)
+            '▓': '#1C1814',  // Black (body)
+            '░': '#FF6B35',  // Orange (eyes) - CORE branding
+            ' ': 'transparent'
+        };
+
+        let currentFrame = 0;
+        let score = 0;
+
+        function drawRatel(frameIndex) {
+            const sprite = document.getElementById('ratelSprite');
+            sprite.innerHTML = '';
+            
+            const frame = ratelFrames[frameIndex];
+            
+            frame.forEach((row, y) => {
+                [...row].forEach((char, x) => {
+                    if (char !== ' ') {
+                        const pixel = document.createElement('div');
+                        pixel.className = 'pixel';
+                        pixel.style.left = (x * 4) + 'px';
+                        pixel.style.top = (y * 4) + 'px';
+                        pixel.style.backgroundColor = colorMap[char] || 'transparent';
+                        
+                        // Make eyes glow
+                        if (char === '░') {
+                            pixel.style.boxShadow = '0 0 4px #FF6B35';
+                        }
+                        
+                        sprite.appendChild(pixel);
+                    }
+                });
+            });
+        }
+
+        // Animate ratel running
+        function animateRatel() {
+            currentFrame = (currentFrame + 1) % ratelFrames.length;
+            drawRatel(currentFrame);
+        }
+
+        // Jump animation
+        function jump() {
+            const ratel = document.getElementById('ratel');
+            if (!ratel.classList.contains('jumping')) {
+                ratel.style.animation = 'jump 0.5s ease-out';
+                setTimeout(() => {
+                    ratel.style.animation = '';
+                }, 500);
+            }
+        }
+
+        // Add jump animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes jump {
+                0% { bottom: 20px; }
+                50% { bottom: 80px; }
+                100% { bottom: 20px; }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Jump on click/tap
+        document.getElementById('gameScreen').addEventListener('click', jump);
+        document.addEventListener('keydown', (e) => {
+            if (e.code === 'Space' || e.code === 'ArrowUp') {
+                e.preventDefault();
+                jump();
+            }
+        });
+
+        // Create obstacles periodically
+        function createObstacle() {
+            const obstacle = document.createElement('div');
+            obstacle.className = Math.random() > 0.5 ? 'obstacle cactus' : 'obstacle';
+            obstacle.style.animationDelay = '0s';
+            obstacle.style.animationDuration = (3 + Math.random() * 2) + 's';
+            document.getElementById('gameScreen').appendChild(obstacle);
+            
+            // Remove obstacle after animation
+            setTimeout(() => {
+                obstacle.remove();
+            }, 6000);
+        }
+
+        // Update score
+        function updateScore() {
+            score += 1;
+            document.getElementById('score').textContent = String(score).padStart(4, '0');
+        }
+
+        // Initialize
+        drawRatel(0);
+        
+        // Start animations
+        setInterval(animateRatel, 200);  // Switch frames for running animation
+        setInterval(updateScore, 100);   // Update score
+        setInterval(createObstacle, 2000 + Math.random() * 2000); // Create obstacles
+
+        // Initial obstacles
+        setTimeout(createObstacle, 1000);
+    </script>
+</body>
+</html>

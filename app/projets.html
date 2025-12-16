@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projets - RATTEL</title>
+    <meta name="description" content="Decouvrez tous les projets d'investissement disponibles sur RATTEL.">
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .page-hero {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--secondary-blue) 100%);
+            color: white;
+            padding: 3rem 0;
+            text-align: center;
+        }
+        .page-hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .page-hero p {
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+        .filters-bar {
+            background: white;
+            padding: 1.5rem 0;
+            border-bottom: 1px solid #eee;
+            position: sticky;
+            top: 70px;
+            z-index: 100;
+        }
+        .filters-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .search-box {
+            display: flex;
+            gap: 0.5rem;
+        }
+        .search-input {
+            padding: 0.7rem 1.2rem;
+            border: 2px solid #eee;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            min-width: 250px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        .search-input:focus {
+            border-color: var(--primary-orange);
+        }
+        .select-filter {
+            padding: 0.7rem 1.2rem;
+            border: 2px solid #eee;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            background: white;
+            cursor: pointer;
+            outline: none;
+        }
+        .projects-count {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+        .projects-list {
+            padding: 3rem 0;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--text-light);
+        }
+        .empty-state h3 {
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <script src="js/auth.js"></script>
+
+    <!-- Header -->
+    <header>
+        <div class="header-top">
+            <div class="container">
+                <span>contact@rattel.io | +687 XX.XX.XX</span>
+                <div>
+                    <a href="#" onclick="rattelLogout(); return false;">Deconnexion</a>
+                </div>
+            </div>
+        </div>
+        <nav>
+            <div class="container">
+                <a href="index.html" class="logo">RATTEL <span class="beta-badge">BETA</span></a>
+                <ul class="nav-menu" id="navMenu">
+                    <li><a href="index.html">Accueil</a></li>
+                    <li><a href="projets.html" class="active">Projets</a></li>
+                    <li><a href="comment-ca-marche.html">Comment ca marche</a></li>
+                    <li><a href="se-financer.html">Se financer</a></li>
+                    <li><a href="a-propos.html">A propos</a></li>
+                </ul>
+                <div class="nav-actions">
+                    <a href="inscription.html" class="btn-nav">Creer un compte</a>
+                </div>
+                <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Page Hero -->
+    <section class="page-hero">
+        <div class="container">
+            <h1>Projets d'investissement</h1>
+            <p>Decouvrez les opportunites d'investissement en Nouvelle-Caledonie</p>
+        </div>
+    </section>
+
+    <!-- Filters -->
+    <div class="filters-bar">
+        <div class="container">
+            <div class="filters-container">
+                <div class="projects-tabs">
+                    <button class="tab-btn active" data-filter="all">Tous</button>
+                    <button class="tab-btn" data-filter="immobilier">Immobilier</button>
+                    <button class="tab-btn" data-filter="entreprise">Entreprises</button>
+                    <button class="tab-btn" data-filter="agriculture">Agriculture</button>
+                </div>
+                <div class="search-box">
+                    <input type="text" class="search-input" placeholder="Rechercher un projet..." id="searchInput">
+                    <select class="select-filter" id="sortSelect">
+                        <option value="recent">Plus recents</option>
+                        <option value="taux">Meilleur taux</option>
+                        <option value="collecte">Collecte en cours</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Projects List -->
+    <section class="projects-list">
+        <div class="container">
+            <p class="projects-count mb-3"><span id="projectCount">3</span> projets disponibles</p>
+
+            <div class="projects-grid">
+                <!-- Project 1 -->
+                <div class="project-card" data-category="immobilier">
+                    <div class="project-image">
+                        <span class="project-badge">En cours</span>
+                    </div>
+                    <div class="project-content">
+                        <span class="project-category">Immobilier</span>
+                        <h3 class="project-title">Residence Les Jardins de Paita</h3>
+                        <p class="project-description">Construction d'une residence de 12 logements avec espaces verts au coeur de Paita.</p>
+                        <div class="project-meta">
+                            <div class="meta-item">
+                                <div class="meta-value">9%</div>
+                                <div class="meta-label">Taux annuel</div>
+                            </div>
+                            <div class="meta-item">
+                                <div class="meta-value">18</div>
+                                <div class="meta-label">Mois</div>
+                            </div>
+                            <div class="meta-item">
+                                <div class="meta-value">In fine</div>
+                                <div class="meta-label">Remboursement</div>
+                            </div>
+                        </div>
+                        <div class="project-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 65%;"></div>
+                            </div>
+                            <div class="progress-info">
+                                <span>65% collecte</span>
+                                <span>3 250 000 / 5 000 000 XPF</span>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="projets/projet-1.html" class="project-link">Voir le projet</a>
+                </div>
+
+                <!-- Project 2 -->
+                <div class="project-card" data-category="agriculture">
+                    <div class="project-image">
+                        <span class="project-badge">En cours</span>
+                    </div>
+                    <div class="project-content">
+                        <span class="project-category">Agriculture</span>
+                        <h3 class="project-title">Ferme Aquacole de Boulouparis</h3>
+                        <p class="project-description">Extension d'une ferme aquacole pour la production de crevettes bio destinees au marche local.</p>
+                        <div class="project-meta">
+                            <div class="meta-item">
+                                <div class="meta-value">10%</div>
+                                <div class="meta-label">Taux annuel</div>
+                            </div>
+                            <div class="meta-item">
+                                <div class="meta-value">24</div>
+                                <div class="meta-label">Mois</div>
+                            </div>
+                            <div class="meta-item">
+                                <div class="meta-value">Mensuel</div>
+                                <div class="meta-label">Remboursement</div>
+                            </div>
+                        </div>
+                        <div class="project-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 40%;"></div>
+                            </div>
+                            <div class="progress-info">
+                                <span>40% collecte</span>
+                                <span>1 200 000 / 3 000 000 XPF</span>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="projets/projet-2.html" class="project-link">Voir le projet</a>
+                </div>
+
+                <!-- Project 3 -->
+                <div class="project-card" data-category="entreprise">
+                    <div class="project-image">
+                        <span class="project-badge soon">Bientot</span>
+                    </div>
+                    <div class="project-content">
+                        <span class="project-category">Entreprise</span>
+                        <h3 class="project-title">Extension Brasserie Artisanale</h3>
+                        <p class="project-description">Agrandissement d'une brasserie artisanale primee pour repondre a la demande croissante.</p>
+                        <div class="project-meta">
+                            <div class="meta-item">
+                                <div class="meta-value">8%</div>
+                                <div class="meta-label">Taux annuel</div>
+                            </div>
+                            <div class="meta-item">
+                                <div class="meta-value">36</div>
+                                <div class="meta-label">Mois</div>
+                            </div>
+                            <div class="meta-item">
+                                <div class="meta-value">Trimestriel</div>
+                                <div class="meta-label">Remboursement</div>
+                            </div>
+                        </div>
+                        <div class="project-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 0%;"></div>
+                            </div>
+                            <div class="progress-info">
+                                <span>Ouverture J-3</span>
+                                <span>0 / 2 000 000 XPF</span>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="projets/projet-3.html" class="project-link">Voir le projet</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-column">
+                    <h3>RATTEL</h3>
+                    <p>La premiere plateforme de financement participatif 100% dediee a la Nouvelle-Caledonie.</p>
+                </div>
+                <div class="footer-column">
+                    <h3>Investir</h3>
+                    <ul>
+                        <li><a href="projets.html?cat=immobilier">Immobilier</a></li>
+                        <li><a href="projets.html?cat=entreprise">Entreprises</a></li>
+                        <li><a href="projets.html?cat=agriculture">Agriculture</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Ressources</h3>
+                    <ul>
+                        <li><a href="comment-ca-marche.html">Comment ca marche</a></li>
+                        <li><a href="faq.html">FAQ</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>A propos</h3>
+                    <ul>
+                        <li><a href="a-propos.html">Qui sommes-nous</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 RATTEL - Tous droits reserves</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('mobileMenuToggle').addEventListener('click', function() {
+            document.getElementById('navMenu').classList.toggle('active');
+        });
+
+        // Tab filtering
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                filterProjects();
+            });
+        });
+
+        // Search
+        document.getElementById('searchInput').addEventListener('input', filterProjects);
+
+        function filterProjects() {
+            const filter = document.querySelector('.tab-btn.active').dataset.filter;
+            const search = document.getElementById('searchInput').value.toLowerCase();
+            let visibleCount = 0;
+
+            document.querySelectorAll('.project-card').forEach(card => {
+                const matchCategory = filter === 'all' || card.dataset.category === filter;
+                const matchSearch = card.textContent.toLowerCase().includes(search);
+
+                if (matchCategory && matchSearch) {
+                    card.style.display = 'block';
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            document.getElementById('projectCount').textContent = visibleCount;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="RATTEL - La premiere plateforme de financement participatif 100% Nouvelle-Caledonie. Coming Soon.">
+    <meta name="theme-color" content="#1a1a2e">
+    <meta name="keywords" content="crowdfunding, financement participatif, Nouvelle-Caledonie, investissement, NC, Noumea">
+    <meta name="author" content="RATTEL">
+    <meta name="robots" content="index, follow">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://rattel.io/">
+    <meta property="og:title" content="RATTEL - Financement Participatif Nouvelle-Caledonie">
+    <meta property="og:description" content="La premiere plateforme de financement participatif 100% dediee a la Nouvelle-Caledonie. Coming Soon.">
+    <meta property="og:image" content="https://rattel.io/og-image.png">
+    <meta property="og:locale" content="fr_FR">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://rattel.io/">
+    <meta property="twitter:title" content="RATTEL - Financement Participatif Nouvelle-Caledonie">
+    <meta property="twitter:description" content="La premiere plateforme de financement participatif 100% dediee a la Nouvelle-Caledonie.">
+    <meta property="twitter:image" content="https://rattel.io/og-image.png">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://rattel.io/">
+
+    <title>RATTEL funding - Coming Soon</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="alternate icon" href="favicon.svg">
+    <link rel="mask-icon" href="favicon.svg" color="#FF6B35">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1 class="logo">RATTEL</h1>
+        <p class="logo-sub">FUNDING</p>
+
+        <div class="game-container">
+            <div class="game-screen" id="gameScreen">
+                <!-- Game will be injected here by JavaScript -->
+            </div>
+            <p class="instructions">TAP ou ESPACE pour ATTAQUER ! Remplis la jauge RAGE pour l'invincibilite !</p>
+        </div>
+
+        <div class="loading-bar">
+            <div class="loading-progress"></div>
+        </div>
+
+        <div class="message">
+            Plateforme de financement<span class="highlight">.IO</span><br>
+            <span class="highlight">100% Nouvelle-Caledonie</span><br>
+            Coming Soon
+        </div>
+
+        <form class="email-form" id="emailForm">
+            <input type="hidden" name="access_key" value="c86d9e73-609e-4918-9cde-061fc5aa0f6e">
+            <input type="hidden" name="subject" value="Nouvelle inscription - RATTEL.IO">
+            <input type="hidden" name="from_name" value="RATTEL.IO - Coming Soon">
+            <input type="checkbox" name="botcheck" class="hidden" style="display: none;">
+
+            <div class="email-input-container">
+                <input
+                    type="email"
+                    class="email-input"
+                    name="email"
+                    placeholder="Votre email"
+                    id="emailInput"
+                    required
+                />
+                <button type="submit" class="submit-btn">
+                    Me prevenir du lancement
+                </button>
+            </div>
+            <div class="form-message" id="formMessage"></div>
+            <p class="rgpd-notice">
+                En soumettant ce formulaire, vous acceptez que vos donnees personnelles soient collectees et traitees dans le cadre de notre politique de confidentialite, conformement au RGPD.
+            </p>
+        </form>
+    </div>
+
+    <script src="js/game.js"></script>
+    <script src="js/form.js"></script>
+</body>
+</html>

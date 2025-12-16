@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon espace - RATTEL</title>
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .dashboard-hero {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--secondary-blue) 100%);
+            color: white;
+            padding: 3rem 0;
+        }
+        .dashboard-hero h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        .dashboard-hero p {
+            opacity: 0.9;
+        }
+
+        .dashboard-content {
+            padding: 3rem 0;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .dashboard-card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        .dashboard-card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .dashboard-card .icon {
+            font-size: 1.5rem;
+        }
+
+        .stat-big {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: var(--primary-orange);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--text-light);
+            font-size: 0.95rem;
+        }
+
+        .action-list {
+            list-style: none;
+        }
+
+        .action-list li {
+            padding: 1rem 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .action-list li:last-child {
+            border-bottom: none;
+        }
+
+        .action-list a {
+            color: var(--text-dark);
+            text-decoration: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .action-list a:hover {
+            color: var(--primary-orange);
+        }
+
+        .action-list .arrow {
+            color: var(--text-light);
+        }
+
+        .empty-portfolio {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-light);
+        }
+
+        .empty-portfolio a {
+            color: var(--primary-orange);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .user-menu {
+            position: relative;
+        }
+
+        .user-btn {
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .user-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+            min-width: 180px;
+            display: none;
+            z-index: 100;
+        }
+
+        .user-dropdown.show {
+            display: block;
+        }
+
+        .user-dropdown a {
+            display: block;
+            padding: 0.75rem 1rem;
+            color: var(--text-dark);
+            text-decoration: none;
+        }
+
+        .user-dropdown a:hover {
+            background: var(--bg-light);
+        }
+
+        .user-dropdown a.logout {
+            color: var(--accent);
+            border-top: 1px solid #eee;
+        }
+
+        .completion-checklist {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            background: var(--bg-light);
+            border-radius: 8px;
+        }
+
+        .check-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .check-icon.complete {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .check-icon.pending {
+            background: #e0e0e0;
+            color: #999;
+        }
+
+        .check-label {
+            flex: 1;
+            font-size: 0.95rem;
+            color: var(--text-dark);
+        }
+
+        .check-action {
+            font-size: 0.85rem;
+            color: var(--primary-orange);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .check-action:hover {
+            text-decoration: underline;
+        }
+
+        .status-box {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .status-box.pending {
+            background: rgba(255, 152, 0, 0.1);
+        }
+
+        .status-box.complete {
+            background: rgba(76, 175, 80, 0.1);
+        }
+
+        .status-box strong {
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .status-box.pending strong {
+            color: #FF9800;
+        }
+
+        .status-box.complete strong {
+            color: #4CAF50;
+        }
+
+        .status-box p {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+    </style>
+</head>
+<body>
+    <script src="js/auth.js"></script>
+    <script>
+        // Check if user is logged in
+        const user = JSON.parse(sessionStorage.getItem('rattel_user'));
+        if (!user) {
+            window.location.href = 'connexion.html';
+        }
+    </script>
+
+    <!-- Header -->
+    <header>
+        <div class="header-top">
+            <div class="container">
+                <span>contact@rattel.io</span>
+                <div class="user-menu">
+                    <button class="user-btn" onclick="toggleUserMenu()">
+                        <span id="userNameHeader"></span> ▼
+                    </button>
+                    <div class="user-dropdown" id="userDropdown">
+                        <a href="profil.html">Mon profil</a>
+                        <a href="documents.html">Mes documents</a>
+                        <a href="#" class="logout" onclick="logout()">Deconnexion</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <nav>
+            <div class="container">
+                <a href="index.html" class="logo">RATTEL <span class="beta-badge">BETA</span></a>
+                <ul class="nav-menu" id="navMenu">
+                    <li><a href="index.html">Accueil</a></li>
+                    <li><a href="projets.html">Projets</a></li>
+                    <li><a href="dashboard.html" class="active">Mon espace</a></li>
+                </ul>
+                <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Dashboard Hero -->
+    <section class="dashboard-hero">
+        <div class="container">
+            <h1>Bienvenue, <span id="userName"></span></h1>
+            <p>Gerez vos investissements et suivez leur performance</p>
+        </div>
+    </section>
+
+    <!-- Dashboard Content -->
+    <section class="dashboard-content">
+        <div class="container">
+            <div class="dashboard-grid">
+                <!-- Portfolio Summary -->
+                <div class="dashboard-card">
+                    <h3><span class="icon">💼</span> Mon portefeuille</h3>
+                    <div class="empty-portfolio">
+                        <p>Vous n'avez pas encore d'investissement</p>
+                        <br>
+                        <a href="projets.html">Decouvrir les projets →</a>
+                    </div>
+                </div>
+
+                <!-- Stats -->
+                <div class="dashboard-card">
+                    <h3><span class="icon">📊</span> Mes statistiques</h3>
+                    <div class="stat-big">0 XPF</div>
+                    <div class="stat-label">Total investi</div>
+                    <br>
+                    <div class="stat-big">0 XPF</div>
+                    <div class="stat-label">Interets perçus</div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="dashboard-card">
+                    <h3><span class="icon">⚡</span> Actions rapides</h3>
+                    <ul class="action-list">
+                        <li><a href="projets.html">Investir dans un projet <span class="arrow">→</span></a></li>
+                        <li><a href="profil.html">Completer mon profil <span class="arrow">→</span></a></li>
+                        <li><a href="documents.html">Telecharger mes documents <span class="arrow">→</span></a></li>
+                        <li><a href="historique.html">Voir mon historique <span class="arrow">→</span></a></li>
+                    </ul>
+                </div>
+
+                <!-- Verification Status -->
+                <div class="dashboard-card" id="verificationCard">
+                    <h3><span class="icon">✓</span> Verification du compte</h3>
+                    <div id="verificationContent">
+                        <!-- Will be populated by JS -->
+                    </div>
+                </div>
+
+                <!-- Profile Completion -->
+                <div class="dashboard-card">
+                    <h3><span class="icon">📋</span> Etapes de verification</h3>
+                    <div class="completion-checklist">
+                        <div class="checklist-item" id="checkAccount">
+                            <span class="check-icon complete">✓</span>
+                            <span class="check-label">Compte cree</span>
+                        </div>
+                        <div class="checklist-item" id="checkProfil">
+                            <span class="check-icon pending">○</span>
+                            <span class="check-label">Profil investisseur</span>
+                            <a href="profil.html" class="check-action" id="profilAction">Completer →</a>
+                        </div>
+                        <div class="checklist-item" id="checkDocs">
+                            <span class="check-icon pending">○</span>
+                            <span class="check-label">Documents KYC</span>
+                            <a href="documents.html" class="check-action" id="docsAction">Telecharger →</a>
+                        </div>
+                        <div class="checklist-item" id="checkVerified">
+                            <span class="check-icon pending">○</span>
+                            <span class="check-label">Verification validee</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-bottom" style="border-top: none; padding-top: 0;">
+                <p>&copy; 2025 RATTEL - Tous droits reserves</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Display user name
+        const userData = JSON.parse(sessionStorage.getItem('rattel_user'));
+        if (userData) {
+            document.getElementById('userName').textContent = userData.prenom;
+            document.getElementById('userNameHeader').textContent = userData.prenom;
+        }
+
+        // Load user verification status
+        function loadVerificationStatus() {
+            const users = JSON.parse(localStorage.getItem('rattel_users') || '[]');
+            const currentUser = users.find(u => u.email === userData.email);
+            const verificationContent = document.getElementById('verificationContent');
+
+            if (!currentUser) {
+                verificationContent.innerHTML = `
+                    <div class="status-box pending">
+                        <strong>En attente</strong>
+                        <p>Veuillez completer votre profil pour commencer a investir.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const profilComplete = currentUser.profilComplete || false;
+            const documentsComplete = currentUser.documentsComplete || false;
+            const isVerified = currentUser.status === 'verified';
+
+            // Update checklist
+            if (profilComplete) {
+                const profilCheck = document.querySelector('#checkProfil .check-icon');
+                profilCheck.classList.remove('pending');
+                profilCheck.classList.add('complete');
+                profilCheck.textContent = '✓';
+                document.getElementById('profilAction').textContent = 'Modifier →';
+            }
+
+            if (documentsComplete) {
+                const docsCheck = document.querySelector('#checkDocs .check-icon');
+                docsCheck.classList.remove('pending');
+                docsCheck.classList.add('complete');
+                docsCheck.textContent = '✓';
+                document.getElementById('docsAction').textContent = 'Voir →';
+            }
+
+            if (isVerified) {
+                const verifiedCheck = document.querySelector('#checkVerified .check-icon');
+                verifiedCheck.classList.remove('pending');
+                verifiedCheck.classList.add('complete');
+                verifiedCheck.textContent = '✓';
+            }
+
+            // Update verification status box
+            if (isVerified) {
+                verificationContent.innerHTML = `
+                    <div class="status-box complete">
+                        <strong>Compte verifie</strong>
+                        <p>Votre compte est verifie. Vous pouvez investir sur tous les projets disponibles.</p>
+                    </div>
+                    <a href="projets.html" class="btn-primary btn-small" style="display: inline-block; text-decoration: none;">
+                        Voir les projets
+                    </a>
+                `;
+            } else if (profilComplete && documentsComplete) {
+                verificationContent.innerHTML = `
+                    <div class="status-box pending">
+                        <strong>En cours de verification</strong>
+                        <p>Vos documents sont en cours d'examen. Vous serez notifie par email sous 48h ouvrees.</p>
+                    </div>
+                `;
+            } else if (!profilComplete) {
+                verificationContent.innerHTML = `
+                    <div class="status-box pending">
+                        <strong>Profil incomplet</strong>
+                        <p>Completez votre profil investisseur pour pouvoir investir.</p>
+                    </div>
+                    <a href="profil.html" class="btn-primary btn-small" style="display: inline-block; text-decoration: none;">
+                        Completer mon profil
+                    </a>
+                `;
+            } else {
+                verificationContent.innerHTML = `
+                    <div class="status-box pending">
+                        <strong>Documents manquants</strong>
+                        <p>Telechargez vos documents justificatifs pour finaliser la verification.</p>
+                    </div>
+                    <a href="documents.html" class="btn-primary btn-small" style="display: inline-block; text-decoration: none;">
+                        Telecharger mes documents
+                    </a>
+                `;
+            }
+        }
+
+        loadVerificationStatus();
+
+        // Mobile menu
+        document.getElementById('mobileMenuToggle').addEventListener('click', function() {
+            document.getElementById('navMenu').classList.toggle('active');
+        });
+
+        // User dropdown
+        function toggleUserMenu() {
+            document.getElementById('userDropdown').classList.toggle('show');
+        }
+
+        // Close dropdown on click outside
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.user-menu')) {
+                document.getElementById('userDropdown').classList.remove('show');
+            }
+        });
+
+        // Logout
+        function logout() {
+            sessionStorage.removeItem('rattel_user');
+            window.location.href = 'connexion.html';
+        }
+    </script>
+</body>
+</html>

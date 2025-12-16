@@ -1,0 +1,1088 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RATTEL - Inscription Investisseur Complète</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-orange: #FF6B35;
+            --primary-dark: #1a1a2e;
+            --secondary-blue: #0F3460;
+            --accent: #E94560;
+            --text-dark: #2c2c2c;
+            --text-light: #666;
+            --bg-light: #f8f9fa;
+            --white: #ffffff;
+            --shadow: 0 10px 30px rgba(0,0,0,0.1);
+            --success: #4CAF50;
+            --error: #f44336;
+            --warning: #ff9800;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--secondary-blue) 100%);
+            min-height: 100vh;
+            padding: 2rem 1rem;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .logo {
+            font-size: 3rem;
+            font-weight: 900;
+            color: var(--white);
+            text-shadow: 0 0 30px rgba(255, 107, 53, 0.4);
+            letter-spacing: -2px;
+            margin-bottom: 0.5rem;
+        }
+
+        .tagline {
+            color: rgba(255,255,255,0.8);
+            font-size: 1.1rem;
+        }
+
+        /* Form Card */
+        .form-card {
+            background: var(--white);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+
+        /* Progress Bar */
+        .progress-bar {
+            display: flex;
+            background: var(--bg-light);
+            padding: 1.5rem;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .progress-step {
+            flex: 1;
+            text-align: center;
+            position: relative;
+        }
+
+        .progress-step::after {
+            content: '';
+            position: absolute;
+            top: 20px;
+            right: -50%;
+            width: 100%;
+            height: 2px;
+            background: #e0e0e0;
+            z-index: 1;
+        }
+
+        .progress-step:last-child::after {
+            display: none;
+        }
+
+        .progress-step.active::after,
+        .progress-step.completed::after {
+            background: var(--success);
+        }
+
+        .step-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #e0e0e0;
+            color: var(--text-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 0.5rem;
+            font-weight: bold;
+            position: relative;
+            z-index: 2;
+            transition: all 0.3s;
+        }
+
+        .progress-step.active .step-circle {
+            background: var(--primary-orange);
+            color: var(--white);
+            transform: scale(1.1);
+        }
+
+        .progress-step.completed .step-circle {
+            background: var(--success);
+            color: var(--white);
+        }
+
+        .step-title {
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+
+        .progress-step.active .step-title,
+        .progress-step.completed .step-title {
+            color: var(--text-dark);
+            font-weight: 500;
+        }
+
+        /* Form Steps */
+        .form-step {
+            display: none;
+            padding: 2rem;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        .form-step.active {
+            display: block;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .step-header {
+            margin-bottom: 2rem;
+        }
+
+        .step-title {
+            font-size: 1.8rem;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .step-subtitle {
+            color: var(--text-light);
+            font-size: 1rem;
+        }
+
+        /* Form Elements */
+        .form-row {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-dark);
+            font-weight: 500;
+        }
+
+        .form-group label span {
+            color: var(--error);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-orange);
+            box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
+        }
+
+        select.form-control {
+            cursor: pointer;
+        }
+
+        .form-control.error {
+            border-color: var(--error);
+        }
+
+        textarea.form-control {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        /* Account Type Cards */
+        .account-types {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .account-card {
+            padding: 1.5rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .account-card:hover {
+            border-color: var(--primary-orange);
+            transform: translateY(-2px);
+        }
+
+        .account-card.selected {
+            border-color: var(--primary-orange);
+            background: rgba(255, 107, 53, 0.05);
+        }
+
+        .account-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .account-title {
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.25rem;
+        }
+
+        .account-desc {
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+
+        /* Radio Groups */
+        .radio-group {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
+        }
+
+        .radio-option {
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .radio-label {
+            display: block;
+            padding: 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .radio-label:hover {
+            border-color: var(--primary-orange);
+        }
+
+        .radio-option input[type="radio"] {
+            display: none;
+        }
+
+        .radio-option input[type="radio"]:checked + .radio-label {
+            border-color: var(--primary-orange);
+            background: rgba(255, 107, 53, 0.05);
+            color: var(--primary-orange);
+        }
+
+        /* Checkbox */
+        .checkbox-group {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin-top: 2px;
+            cursor: pointer;
+            accent-color: var(--primary-orange);
+        }
+
+        .checkbox-group label {
+            font-size: 0.95rem;
+            color: var(--text-dark);
+            line-height: 1.5;
+            cursor: pointer;
+        }
+
+        .checkbox-group label a {
+            color: var(--primary-orange);
+            text-decoration: none;
+        }
+
+        /* Info Boxes */
+        .info-box {
+            background: linear-gradient(135deg, rgba(255, 107, 53, 0.1), rgba(233, 69, 96, 0.1));
+            border-left: 4px solid var(--primary-orange);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+        }
+
+        .info-box-title {
+            color: var(--primary-orange);
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .info-box-content {
+            color: var(--text-dark);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .warning-box {
+            background: rgba(255, 152, 0, 0.1);
+            border-left: 4px solid var(--warning);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+        }
+
+        .warning-box-title {
+            color: var(--warning);
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        /* File Upload */
+        .file-upload {
+            border: 2px dashed #e0e0e0;
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 1.5rem;
+        }
+
+        .file-upload:hover {
+            border-color: var(--primary-orange);
+            background: rgba(255, 107, 53, 0.02);
+        }
+
+        .file-upload.active {
+            border-color: var(--success);
+            background: rgba(76, 175, 80, 0.05);
+        }
+
+        .file-upload-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--text-light);
+        }
+
+        .file-upload-text {
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .file-upload-hint {
+            color: var(--text-light);
+            font-size: 0.85rem;
+        }
+
+        .file-list {
+            margin-top: 1rem;
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.75rem;
+            background: var(--bg-light);
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+        }
+
+        .file-name {
+            color: var(--text-dark);
+            font-size: 0.9rem;
+        }
+
+        .file-remove {
+            color: var(--error);
+            cursor: pointer;
+            padding: 0.25rem 0.5rem;
+        }
+
+        /* Password Requirements */
+        .password-requirements {
+            background: var(--bg-light);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 0.5rem;
+        }
+
+        .requirement {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+            color: var(--text-light);
+            margin-bottom: 0.25rem;
+        }
+
+        .requirement::before {
+            content: '○';
+            color: var(--text-light);
+        }
+
+        .requirement.valid::before {
+            content: '✓';
+            color: var(--success);
+        }
+
+        .requirement.valid {
+            color: var(--success);
+        }
+
+        /* Buttons */
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .btn {
+            padding: 0.875rem 2rem;
+            border-radius: 30px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-dark);
+            border: 2px solid #e0e0e0;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--primary-orange);
+            color: var(--primary-orange);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-orange), var(--accent));
+            color: var(--white);
+            flex: 1;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(255, 107, 53, 0.3);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .form-row {
+                flex-direction: column;
+            }
+            
+            .progress-bar {
+                padding: 1rem 0.5rem;
+            }
+            
+            .step-title {
+                display: none;
+            }
+            
+            .radio-group {
+                flex-direction: column;
+            }
+            
+            .radio-option {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1 class="logo">RATTEL</h1>
+            <p class="tagline">Inscription Investisseur</p>
+        </div>
+
+        <!-- Form Card -->
+        <div class="form-card">
+            <!-- Progress Bar -->
+            <div class="progress-bar">
+                <div class="progress-step active" data-step="1">
+                    <div class="step-circle">1</div>
+                    <div class="step-title">Identifiants</div>
+                </div>
+                <div class="progress-step" data-step="2">
+                    <div class="step-circle">2</div>
+                    <div class="step-title">Informations</div>
+                </div>
+                <div class="progress-step" data-step="3">
+                    <div class="step-circle">3</div>
+                    <div class="step-title">Profil Investisseur</div>
+                </div>
+                <div class="progress-step" data-step="4">
+                    <div class="step-circle">4</div>
+                    <div class="step-title">Vérification</div>
+                </div>
+            </div>
+
+            <!-- Form -->
+            <form id="registrationForm">
+                <!-- Step 1: Identifiants -->
+                <div class="form-step active" data-step="1">
+                    <div class="step-header">
+                        <h2 class="step-title">Créez vos identifiants</h2>
+                        <p class="step-subtitle">Choisissez votre type de compte et vos identifiants de connexion</p>
+                    </div>
+
+                    <div class="account-types">
+                        <div class="account-card selected" data-type="particulier">
+                            <div class="account-icon">👤</div>
+                            <div class="account-title">Particulier</div>
+                            <div class="account-desc">Personne physique</div>
+                        </div>
+                        <div class="account-card" data-type="entreprise">
+                            <div class="account-icon">🏢</div>
+                            <div class="account-title">Entreprise</div>
+                            <div class="account-desc">Personne morale</div>
+                        </div>
+                        <div class="account-card" data-type="association">
+                            <div class="account-icon">🤝</div>
+                            <div class="account-title">Association</div>
+                            <div class="account-desc">Organisation à but non lucratif</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Adresse email <span>*</span></label>
+                        <input type="email" class="form-control" id="email" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Mot de passe <span>*</span></label>
+                        <input type="password" class="form-control" id="password" required>
+                        <div class="password-requirements">
+                            <div class="requirement" id="req-uppercase">Au moins une majuscule</div>
+                            <div class="requirement" id="req-lowercase">Au moins une minuscule</div>
+                            <div class="requirement" id="req-number">Au moins un chiffre</div>
+                            <div class="requirement" id="req-special">Au moins un caractère spécial</div>
+                            <div class="requirement" id="req-length">Entre 8 et 20 caractères</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="confirmPassword">Confirmer le mot de passe <span>*</span></label>
+                        <input type="password" class="form-control" id="confirmPassword" required>
+                        <div class="requirement" id="req-match">Les mots de passe correspondent</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="referral">Code parrain (optionnel)</label>
+                        <input type="text" class="form-control" id="referral" placeholder="Ex: PARRAIN2024">
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-primary" onclick="nextStep()">
+                            Continuer
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Step 2: Informations personnelles -->
+                <div class="form-step" data-step="2">
+                    <div class="step-header">
+                        <h2 class="step-title">Vos informations personnelles</h2>
+                        <p class="step-subtitle">Ces informations sont nécessaires pour votre identification</p>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Civilité <span>*</span></label>
+                            <div class="radio-group">
+                                <div class="radio-option">
+                                    <input type="radio" id="mr" name="civilite" value="mr" checked>
+                                    <label class="radio-label" for="mr">M.</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" id="mme" name="civilite" value="mme">
+                                    <label class="radio-label" for="mme">Mme</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="nom">Nom <span>*</span></label>
+                            <input type="text" class="form-control" id="nom" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="prenom">Prénom <span>*</span></label>
+                            <input type="text" class="form-control" id="prenom" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="dateNaissance">Date de naissance <span>*</span></label>
+                            <input type="date" class="form-control" id="dateNaissance" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="lieuNaissance">Lieu de naissance <span>*</span></label>
+                            <input type="text" class="form-control" id="lieuNaissance" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="nationalite">Nationalité <span>*</span></label>
+                        <select class="form-control" id="nationalite" required>
+                            <option value="">Sélectionnez...</option>
+                            <option value="FR">Française</option>
+                            <option value="NC">Néo-Calédonienne</option>
+                            <option value="AU">Australienne</option>
+                            <option value="NZ">Néo-Zélandaise</option>
+                            <option value="other">Autre</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="adresse">Adresse <span>*</span></label>
+                        <input type="text" class="form-control" id="adresse" placeholder="Numéro et nom de rue" required>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="codePostal">Code postal <span>*</span></label>
+                            <input type="text" class="form-control" id="codePostal" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="ville">Ville <span>*</span></label>
+                            <input type="text" class="form-control" id="ville" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="telephone">Téléphone <span>*</span></label>
+                            <input type="tel" class="form-control" id="telephone" placeholder="+687..." required>
+                        </div>
+                        <div class="form-group">
+                            <label for="profession">Profession <span>*</span></label>
+                            <input type="text" class="form-control" id="profession" required>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" onclick="prevStep()">
+                            Retour
+                        </button>
+                        <button type="button" class="btn btn-primary" onclick="nextStep()">
+                            Continuer
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Step 3: Profil Investisseur -->
+                <div class="form-step" data-step="3">
+                    <div class="step-header">
+                        <h2 class="step-title">Votre profil investisseur</h2>
+                        <p class="step-subtitle">Ces informations nous permettent de vous proposer des projets adaptés</p>
+                    </div>
+
+                    <div class="warning-box">
+                        <div class="warning-box-title">⚠️ Évaluation obligatoire</div>
+                        <div class="info-box-content">
+                            Conformément à la réglementation AMF, nous devons évaluer vos connaissances et votre expérience en matière d'investissement.
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Quelle est votre expérience en investissement ? <span>*</span></label>
+                        <div class="radio-group">
+                            <div class="radio-option">
+                                <input type="radio" id="exp1" name="experience" value="debutant">
+                                <label class="radio-label" for="exp1">
+                                    <strong>Débutant</strong><br>
+                                    <small>Aucune expérience</small>
+                                </label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="exp2" name="experience" value="intermediaire">
+                                <label class="radio-label" for="exp2">
+                                    <strong>Intermédiaire</strong><br>
+                                    <small>1 à 5 ans</small>
+                                </label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="exp3" name="experience" value="confirme">
+                                <label class="radio-label" for="exp3">
+                                    <strong>Confirmé</strong><br>
+                                    <small>Plus de 5 ans</small>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Quels types d'investissements avez-vous déjà réalisés ? <span>*</span></label>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="inv1" name="investments">
+                            <label for="inv1">Livrets d'épargne (Livret A, LDD, etc.)</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="inv2" name="investments">
+                            <label for="inv2">Assurance-vie</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="inv3" name="investments">
+                            <label for="inv3">Actions cotées en bourse</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="inv4" name="investments">
+                            <label for="inv4">Obligations</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="inv5" name="investments">
+                            <label for="inv5">Immobilier locatif</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="inv6" name="investments">
+                            <label for="inv6">Crowdfunding / Financement participatif</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="inv7" name="investments">
+                            <label for="inv7">Aucun</label>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="revenus">Revenus annuels nets <span>*</span></label>
+                            <select class="form-control" id="revenus" required>
+                                <option value="">Sélectionnez...</option>
+                                <option value="0-3M">Moins de 3 millions XPF</option>
+                                <option value="3-6M">3 à 6 millions XPF</option>
+                                <option value="6-12M">6 à 12 millions XPF</option>
+                                <option value="12M+">Plus de 12 millions XPF</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="patrimoine">Patrimoine financier <span>*</span></label>
+                            <select class="form-control" id="patrimoine" required>
+                                <option value="">Sélectionnez...</option>
+                                <option value="0-10M">Moins de 10 millions XPF</option>
+                                <option value="10-30M">10 à 30 millions XPF</option>
+                                <option value="30-60M">30 à 60 millions XPF</option>
+                                <option value="60M+">Plus de 60 millions XPF</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="montantInvestir">Montant que vous souhaitez investir sur RATTEL <span>*</span></label>
+                        <select class="form-control" id="montantInvestir" required>
+                            <option value="">Sélectionnez...</option>
+                            <option value="10-100K">10 000 à 100 000 XPF</option>
+                            <option value="100K-500K">100 000 à 500 000 XPF</option>
+                            <option value="500K-1M">500 000 à 1 million XPF</option>
+                            <option value="1M-5M">1 à 5 millions XPF</option>
+                            <option value="5M+">Plus de 5 millions XPF</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Objectifs d'investissement <span>*</span></label>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="obj1" name="objectifs">
+                            <label for="obj1">Diversifier mon patrimoine</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="obj2" name="objectifs">
+                            <label for="obj2">Générer des revenus complémentaires</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="obj3" name="objectifs">
+                            <label for="obj3">Préparer ma retraite</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="obj4" name="objectifs">
+                            <label for="obj4">Soutenir l'économie locale</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="obj5" name="objectifs">
+                            <label for="obj5">Défiscaliser</label>
+                        </div>
+                    </div>
+
+                    <div class="info-box">
+                        <div class="info-box-title">💡 Avertissement sur les risques</div>
+                        <div class="info-box-content">
+                            L'investissement dans des projets de financement participatif présente un risque de perte partielle ou totale du capital investi ainsi qu'un risque d'illiquidité. N'investissez que l'argent dont vous n'avez pas besoin à court terme.
+                        </div>
+                    </div>
+
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="comprendRisques" required>
+                        <label for="comprendRisques">
+                            <strong>Je comprends et j'accepte les risques liés au financement participatif</strong>
+                        </label>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" onclick="prevStep()">
+                            Retour
+                        </button>
+                        <button type="button" class="btn btn-primary" onclick="nextStep()">
+                            Continuer
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Step 4: Vérification d'identité -->
+                <div class="form-step" data-step="4">
+                    <div class="step-header">
+                        <h2 class="step-title">Vérification de votre identité</h2>
+                        <p class="step-subtitle">Dernière étape : téléchargez vos documents justificatifs</p>
+                    </div>
+
+                    <div class="info-box">
+                        <div class="info-box-title">🔒 Sécurité des données</div>
+                        <div class="info-box-content">
+                            Vos documents sont traités de manière sécurisée et confidentielle. Ils sont uniquement utilisés pour vérifier votre identité conformément à la réglementation.
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Pièce d'identité <span>*</span></label>
+                        <div class="file-upload" onclick="document.getElementById('pieceIdentite').click()">
+                            <input type="file" id="pieceIdentite" style="display: none;" accept="image/*,.pdf">
+                            <div class="file-upload-icon">📄</div>
+                            <div class="file-upload-text">Cliquez pour télécharger votre pièce d'identité</div>
+                            <div class="file-upload-hint">Carte d'identité (recto/verso), passeport ou permis de conduire</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Justificatif de domicile <span>*</span></label>
+                        <div class="file-upload" onclick="document.getElementById('justifDomicile').click()">
+                            <input type="file" id="justifDomicile" style="display: none;" accept="image/*,.pdf">
+                            <div class="file-upload-icon">🏠</div>
+                            <div class="file-upload-text">Cliquez pour télécharger un justificatif de domicile</div>
+                            <div class="file-upload-hint">Facture d'eau, électricité, internet de moins de 3 mois</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>RIB (Relevé d'Identité Bancaire) <span>*</span></label>
+                        <div class="file-upload" onclick="document.getElementById('rib').click()">
+                            <input type="file" id="rib" style="display: none;" accept="image/*,.pdf">
+                            <div class="file-upload-icon">🏦</div>
+                            <div class="file-upload-text">Cliquez pour télécharger votre RIB</div>
+                            <div class="file-upload-hint">Pour les virements de vos gains</div>
+                        </div>
+                    </div>
+
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="cgu" required>
+                        <label for="cgu">
+                            J'accepte les <a href="#">Conditions Générales d'Utilisation</a> de RATTEL
+                        </label>
+                    </div>
+
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="politique" required>
+                        <label for="politique">
+                            J'accepte la <a href="#">Politique de Protection des Données</a>
+                        </label>
+                    </div>
+
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="newsletter">
+                        <label for="newsletter">
+                            Je souhaite recevoir la newsletter RATTEL (nouveaux projets, actualités)
+                        </label>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" onclick="prevStep()">
+                            Retour
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            Finaliser mon inscription
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let currentStep = 1;
+        const totalSteps = 4;
+
+        // Account type selection
+        document.querySelectorAll('.account-card').forEach(card => {
+            card.addEventListener('click', function() {
+                document.querySelectorAll('.account-card').forEach(c => c.classList.remove('selected'));
+                this.classList.add('selected');
+            });
+        });
+
+        // Password validation
+        const password = document.getElementById('password');
+        const confirmPassword = document.getElementById('confirmPassword');
+        
+        function validatePassword() {
+            const value = password.value;
+            
+            document.getElementById('req-uppercase').classList.toggle('valid', /[A-Z]/.test(value));
+            document.getElementById('req-lowercase').classList.toggle('valid', /[a-z]/.test(value));
+            document.getElementById('req-number').classList.toggle('valid', /[0-9]/.test(value));
+            document.getElementById('req-special').classList.toggle('valid', /[!@#$%^&*]/.test(value));
+            document.getElementById('req-length').classList.toggle('valid', value.length >= 8 && value.length <= 20);
+            
+            if (confirmPassword.value) {
+                document.getElementById('req-match').classList.toggle('valid', value === confirmPassword.value);
+            }
+        }
+
+        if (password) {
+            password.addEventListener('input', validatePassword);
+        }
+        if (confirmPassword) {
+            confirmPassword.addEventListener('input', validatePassword);
+        }
+
+        // File upload handling
+        document.querySelectorAll('input[type="file"]').forEach(input => {
+            input.addEventListener('change', function() {
+                const fileUpload = this.parentElement;
+                if (this.files.length > 0) {
+                    fileUpload.classList.add('active');
+                    fileUpload.querySelector('.file-upload-text').textContent = `✓ ${this.files[0].name}`;
+                }
+            });
+        });
+
+        // Navigation between steps
+        function showStep(step) {
+            // Hide all steps
+            document.querySelectorAll('.form-step').forEach(s => s.classList.remove('active'));
+            // Show current step
+            document.querySelector(`.form-step[data-step="${step}"]`).classList.add('active');
+            
+            // Update progress bar
+            document.querySelectorAll('.progress-step').forEach(s => {
+                const stepNum = parseInt(s.dataset.step);
+                s.classList.remove('active', 'completed');
+                if (stepNum < step) {
+                    s.classList.add('completed');
+                } else if (stepNum === step) {
+                    s.classList.add('active');
+                }
+            });
+        }
+
+        function nextStep() {
+            // Basic validation before moving to next step
+            const currentStepElement = document.querySelector(`.form-step[data-step="${currentStep}"]`);
+            const requiredFields = currentStepElement.querySelectorAll('[required]');
+            let valid = true;
+
+            requiredFields.forEach(field => {
+                if (!field.value || (field.type === 'checkbox' && !field.checked)) {
+                    valid = false;
+                    field.classList.add('error');
+                } else {
+                    field.classList.remove('error');
+                }
+            });
+
+            if (!valid) {
+                alert('Veuillez remplir tous les champs obligatoires');
+                return;
+            }
+
+            if (currentStep < totalSteps) {
+                currentStep++;
+                showStep(currentStep);
+                window.scrollTo(0, 0);
+            }
+        }
+
+        function prevStep() {
+            if (currentStep > 1) {
+                currentStep--;
+                showStep(currentStep);
+                window.scrollTo(0, 0);
+            }
+        }
+
+        // Form submission
+        document.getElementById('registrationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Simulate form submission
+            alert('🎉 Inscription réussie ! Vous allez recevoir un email de confirmation.');
+            // Here you would normally submit to your backend
+        });
+
+        // Prevent "Aucun" from being selected with other options
+        document.getElementById('inv7')?.addEventListener('change', function() {
+            if (this.checked) {
+                document.querySelectorAll('[name="investments"]:not(#inv7)').forEach(cb => {
+                    cb.checked = false;
+                });
+            }
+        });
+
+        document.querySelectorAll('[name="investments"]:not(#inv7)').forEach(cb => {
+            cb.addEventListener('change', function() {
+                if (this.checked) {
+                    document.getElementById('inv7').checked = false;
+                }
+            });
+        });
+    </script>
+</body>
+</html>

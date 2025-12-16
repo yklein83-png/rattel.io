@@ -1,0 +1,11 @@
+# Robots.txt for RATTEL.IO
+
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://rattel.io/sitemap.xml
+
+# Block access to app folder for search engines (protected area)
+User-agent: *
+Disallow: /app/

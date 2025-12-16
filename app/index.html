@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RATTEL - Plateforme de Financement Participatif Nouvelle-Caledonie</title>
+    <meta name="description" content="La premiere plateforme de financement participatif 100% dediee a la Nouvelle-Caledonie. Investissez dans l'economie locale.">
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Auth Guard -->
+    <script src="js/auth.js"></script>
+
+    <!-- Header -->
+    <header>
+        <div class="header-top">
+            <div class="container">
+                <span>contact@rattel.io | +687 XX.XX.XX</span>
+                <div>
+                    <a href="#" onclick="rattelLogout(); return false;">Deconnexion</a>
+                </div>
+            </div>
+        </div>
+        <nav>
+            <div class="container">
+                <a href="index.html" class="logo">RATTEL <span class="beta-badge">BETA</span></a>
+                <ul class="nav-menu" id="navMenu">
+                    <li><a href="index.html" class="active">Accueil</a></li>
+                    <li><a href="projets.html">Projets</a></li>
+                    <li><a href="comment-ca-marche.html">Comment ca marche</a></li>
+                    <li><a href="se-financer.html">Se financer</a></li>
+                    <li><a href="a-propos.html">A propos</a></li>
+                </ul>
+                <div class="nav-actions">
+                    <a href="inscription.html" class="btn-nav">Creer un compte</a>
+                </div>
+                <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Investissez dans l'economie <span>caledonienne</span></h1>
+                <p>La premiere plateforme de financement participatif 100% dediee a la Nouvelle-Caledonie.
+                   Soutenez des projets locaux tout en valorisant votre epargne.</p>
+                <div class="hero-buttons">
+                    <a href="projets.html" class="btn-primary">Decouvrir les projets</a>
+                    <a href="comment-ca-marche.html" class="btn-secondary">Comment ca marche ?</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">--</div>
+                    <div class="stat-label">XPF investis</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">--</div>
+                    <div class="stat-label">Projets finances</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">--%</div>
+                    <div class="stat-label">Rendement moyen</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">--</div>
+                    <div class="stat-label">Investisseurs actifs</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <div class="container">
+            <h2 class="section-title">Pourquoi investir avec RATTEL ?</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">💰</div>
+                    <h3 class="feature-title">Accessible</h3>
+                    <p class="feature-description">
+                        Investissez a partir de 10 000 XPF.
+                        Inscription gratuite et ouverte a tous les caledoniens.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🌴</div>
+                    <h3 class="feature-title">100% Local</h3>
+                    <p class="feature-description">
+                        Soutenez exclusivement des projets caledoniens
+                        et participez au developpement de votre territoire.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🛡️</div>
+                    <h3 class="feature-title">Securise</h3>
+                    <p class="feature-description">
+                        Plateforme securisee. Selection rigoureuse
+                        des projets avec garanties adaptees.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📈</div>
+                    <h3 class="feature-title">Rentable</h3>
+                    <p class="feature-description">
+                        Rendements attractifs entre 7% et 12% par an.
+                        Diversifiez votre patrimoine efficacement.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Other Investments Section -->
+    <section class="other-investments" style="padding: 4rem 0; background: white;">
+        <div class="container">
+            <h2 class="section-title">Diversifiez vos placements</h2>
+            <p class="section-subtitle">Decouvrez d'autres opportunites d'investissement selectionnees par nos experts</p>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 2rem;">
+                <!-- SCPI Card -->
+                <a href="#" class="investment-card" style="display: block; background: linear-gradient(135deg, #1a1a2e 0%, #0F3460 100%); border-radius: 15px; padding: 2.5rem; text-decoration: none; color: white; transition: all 0.3s; box-shadow: 0 10px 30px rgba(0,0,0,0.15);">
+                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;">
+                        <div style="width: 60px; height: 60px; background: rgba(255,255,255,0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.8rem;">🏢</div>
+                        <div>
+                            <span style="background: #FF6B35; padding: 0.2rem 0.8rem; border-radius: 20px; font-size: 0.75rem; font-weight: 600;">IMMOBILIER</span>
+                        </div>
+                    </div>
+                    <h3 style="font-size: 1.5rem; margin-bottom: 0.5rem; font-weight: 700;">Investissez en SCPI</h3>
+                    <p style="opacity: 0.8; margin-bottom: 1.5rem; line-height: 1.6;">Accedez a l'immobilier diversifie sans contraintes de gestion. Revenus reguliers et mutualisation des risques.</p>
+                    <div style="display: flex; align-items: baseline; gap: 0.5rem;">
+                        <span style="font-size: 2.5rem; font-weight: 900; color: #FF6B35;">6%</span>
+                        <span style="opacity: 0.7;">rendement annuel</span>
+                    </div>
+                    <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.1); font-size: 0.9rem; opacity: 0.7;">
+                        Bientot disponible →
+                    </div>
+                </a>
+
+                <!-- Produits Structures Card -->
+                <a href="#" class="investment-card" style="display: block; background: linear-gradient(135deg, #E94560 0%, #FF6B35 100%); border-radius: 15px; padding: 2.5rem; text-decoration: none; color: white; transition: all 0.3s; box-shadow: 0 10px 30px rgba(233,69,96,0.3);">
+                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;">
+                        <div style="width: 60px; height: 60px; background: rgba(255,255,255,0.2); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.8rem;">📊</div>
+                        <div>
+                            <span style="background: rgba(255,255,255,0.2); padding: 0.2rem 0.8rem; border-radius: 20px; font-size: 0.75rem; font-weight: 600;">FINANCE</span>
+                        </div>
+                    </div>
+                    <h3 style="font-size: 1.5rem; margin-bottom: 0.5rem; font-weight: 700;">Produits Structures</h3>
+                    <p style="opacity: 0.9; margin-bottom: 1.5rem; line-height: 1.6;">Solutions d'investissement sur mesure avec protection du capital et rendements optimises.</p>
+                    <div style="display: flex; align-items: baseline; gap: 0.5rem;">
+                        <span style="font-size: 2.5rem; font-weight: 900;">10%</span>
+                        <span style="opacity: 0.8;">rendement annuel</span>
+                    </div>
+                    <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.2); font-size: 0.9rem; opacity: 0.8;">
+                        Bientot disponible →
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section class="projects">
+        <div class="container">
+            <div class="projects-header">
+                <h2 class="section-title" style="margin-bottom: 0;">Projets en cours</h2>
+                <div class="projects-tabs">
+                    <button class="tab-btn active" data-filter="all">Tous</button>
+                    <button class="tab-btn" data-filter="immobilier">Immobilier</button>
+                    <button class="tab-btn" data-filter="entreprise">Entreprises</button>
+                    <button class="tab-btn" data-filter="agriculture">Agriculture</button>
+                </div>
+            </div>
+            <div class="projects-grid">
+                <!-- Project 1 -->
+                <div class="project-card" data-category="immobilier">
+                    <div class="project-image">
+                        <span class="project-badge">En cours</span>
+                    </div>
+                    <div class="project-content">
+                        <span class="project-category">Immobilier</span>
+                        <h3 class="project-title">Residence Les Jardins de Paita</h3>
+                        <p class="project-description">Construction d'une residence de 12 logements avec espaces verts au coeur de Paita.</p>
+                        <div class="project-meta">
+                            <div class="meta-item">
+                                <div class="meta-value">9%</div>
+                                <div class="meta-label">Taux annuel</div>
+                            </div>
+                            <div class="meta-item">
+                                <div class="meta-value">18</div>
+                                <div class="meta-label">Mois</div>
+                            </div>
+                            <div class="meta-item">
+                                <div class="meta-value">In fine</div>
+                                <div class="meta-label">Remboursement</div>
+                            </div>
+                        </div>
+                        <div class="project-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 65%;"></div>
+                            </div>
+                            <div class="progress-info">
+                                <span>65% collecte</span>
+                                <span>3 250 000 / 5 000 000 XPF</span>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="projets/projet-1.html" class="project-link">Voir le projet</a>
+                </div>
+
+                <!-- Project 2 -->
+                <div class="project-card" data-category="agriculture">
+                    <div class="project-image">
+                        <span class="project-badge">En cours</span>
+                    </div>
+                    <div class="project-content">
+                        <span class="project-category">Agriculture</span>
+                        <h3 class="project-title">Ferme Aquacole de Boulouparis</h3>
+                        <p class="project-description">Extension d'une ferme aquacole pour la production de crevettes bio destinees au marche local.</p>
+                        <div class="project-meta">
+                            <div class="meta-item">
+                                <div class="meta-value">10%</div>
+                                <div class="meta-label">Taux annuel</div>
+                            </div>
+                            <div class="meta-item">
+                                <div class="meta-value">24</div>
+                                <div class="meta-label">Mois</div>
+                            </div>
+                            <div class="meta-item">
+                                <div class="meta-value">Mensuel</div>
+                                <div class="meta-label">Remboursement</div>
+                            </div>
+                        </div>
+                        <div class="project-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 40%;"></div>
+                            </div>
+                            <div class="progress-info">
+                                <span>40% collecte</span>
+                                <span>1 200 000 / 3 000 000 XPF</span>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="projets/projet-2.html" class="project-link">Voir le projet</a>
+                </div>
+
+                <!-- Project 3 -->
+                <div class="project-card" data-category="entreprise">
+                    <div class="project-image">
+                        <span class="project-badge soon">Bientot</span>
+                    </div>
+                    <div class="project-content">
+                        <span class="project-category">Entreprise</span>
+                        <h3 class="project-title">Extension Brasserie Artisanale</h3>
+                        <p class="project-description">Agrandissement d'une brasserie artisanale primee pour repondre a la demande croissante.</p>
+                        <div class="project-meta">
+                            <div class="meta-item">
+                                <div class="meta-value">8%</div>
+                                <div class="meta-label">Taux annuel</div>
+                            </div>
+                            <div class="meta-item">
+                                <div class="meta-value">36</div>
+                                <div class="meta-label">Mois</div>
+                            </div>
+                            <div class="meta-item">
+                                <div class="meta-value">Trimestriel</div>
+                                <div class="meta-label">Remboursement</div>
+                            </div>
+                        </div>
+                        <div class="project-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 0%;"></div>
+                            </div>
+                            <div class="progress-info">
+                                <span>Ouverture J-3</span>
+                                <span>0 / 2 000 000 XPF</span>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="projets/projet-3.html" class="project-link">Voir le projet</a>
+                </div>
+            </div>
+
+            <div class="text-center mt-4">
+                <a href="projets.html" class="btn-primary btn-small">Voir tous les projets</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <h2>Pret a investir dans l'economie caledonienne ?</h2>
+            <p>Rejoignez notre communaute d'investisseurs et participez au developpement de la Nouvelle-Caledonie</p>
+            <a href="inscription.html" class="btn-white">Creer mon compte gratuitement</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-column">
+                    <h3>RATTEL</h3>
+                    <p>
+                        La premiere plateforme de financement participatif
+                        100% dediee a la Nouvelle-Caledonie.
+                    </p>
+                    <div class="social-links">
+                        <a href="#" class="social-link">f</a>
+                        <a href="#" class="social-link">in</a>
+                        <a href="#" class="social-link">X</a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3>Investir</h3>
+                    <ul>
+                        <li><a href="projets.html?cat=immobilier">Immobilier</a></li>
+                        <li><a href="projets.html?cat=entreprise">Entreprises</a></li>
+                        <li><a href="projets.html?cat=agriculture">Agriculture</a></li>
+                        <li><a href="projets.html?cat=impact">Projets a impact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Ressources</h3>
+                    <ul>
+                        <li><a href="comment-ca-marche.html">Comment ca marche</a></li>
+                        <li><a href="guide-investisseur.html">Guide de l'investisseur</a></li>
+                        <li><a href="faq.html">FAQ</a></li>
+                        <li><a href="blog.html">Blog</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>A propos</h3>
+                    <ul>
+                        <li><a href="a-propos.html">Qui sommes-nous</a></li>
+                        <li><a href="mentions-legales.html">Mentions legales</a></li>
+                        <li><a href="cgu.html">CGU</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 RATTEL - Tous droits reserves</p>
+                <p>L'investissement participatif presente un risque de perte partielle ou totale du capital ainsi qu'un risque d'illiquidite.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        document.getElementById('mobileMenuToggle').addEventListener('click', function() {
+            document.getElementById('navMenu').classList.toggle('active');
+        });
+
+        // Tab filtering
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+
+                const filter = this.dataset.filter;
+                document.querySelectorAll('.project-card').forEach(card => {
+                    if (filter === 'all' || card.dataset.category === filter) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - RATTEL</title>
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-orange: #FF6B35;
+            --primary-dark: #1a1a2e;
+            --secondary-blue: #0F3460;
+            --accent: #E94560;
+            --text-dark: #2c2c2c;
+            --text-light: #666;
+            --bg-light: #f8f9fa;
+            --white: #ffffff;
+            --success: #4CAF50;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-light);
+            min-height: 100vh;
+        }
+
+        .admin-header {
+            background: var(--primary-dark);
+            color: var(--white);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .admin-header h1 {
+            font-size: 1.5rem;
+            color: var(--primary-orange);
+        }
+
+        .admin-header a {
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+        }
+
+        .admin-header a:hover {
+            color: var(--primary-orange);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .stat-card h3 {
+            font-size: 2.5rem;
+            color: var(--primary-orange);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card p {
+            color: var(--text-light);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--text-dark);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .btn-export {
+            padding: 0.5rem 1rem;
+            background: var(--primary-orange);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .btn-export:hover {
+            opacity: 0.9;
+        }
+
+        .btn-danger {
+            background: var(--accent);
+            padding: 0.3rem 0.8rem;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+
+        .btn-success {
+            background: var(--success);
+            padding: 0.3rem 0.8rem;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            margin-right: 0.5rem;
+        }
+
+        .status-badge {
+            padding: 0.25rem 0.5rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .status-pending {
+            background: rgba(255, 152, 0, 0.15);
+            color: #FF9800;
+        }
+
+        .status-verified {
+            background: rgba(76, 175, 80, 0.15);
+            color: #4CAF50;
+        }
+
+        .status-incomplete {
+            background: rgba(158, 158, 158, 0.15);
+            color: #9E9E9E;
+        }
+
+        .table-container {
+            background: var(--white);
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            overflow: hidden;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        th {
+            background: var(--bg-light);
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        tr:hover {
+            background: rgba(255, 107, 53, 0.03);
+        }
+
+        .badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .badge-particulier {
+            background: rgba(76, 175, 80, 0.1);
+            color: var(--success);
+        }
+
+        .badge-entreprise {
+            background: rgba(255, 107, 53, 0.1);
+            color: var(--primary-orange);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--text-light);
+        }
+
+        .empty-state h3 {
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .table-container {
+                overflow-x: auto;
+            }
+            table {
+                min-width: 800px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <script src="js/auth.js"></script>
+
+    <header class="admin-header">
+        <h1>RATTEL Admin</h1>
+        <a href="index.html">← Retour au site</a>
+    </header>
+
+    <div class="container">
+        <div class="stats-row">
+            <div class="stat-card">
+                <h3 id="totalUsers">0</h3>
+                <p>Utilisateurs inscrits</p>
+            </div>
+            <div class="stat-card">
+                <h3 id="particuliers">0</h3>
+                <p>Particuliers</p>
+            </div>
+            <div class="stat-card">
+                <h3 id="entreprises">0</h3>
+                <p>Entreprises</p>
+            </div>
+            <div class="stat-card">
+                <h3 id="newsletters">0</h3>
+                <p>Abonnes newsletter</p>
+            </div>
+        </div>
+
+        <div class="section-title">
+            <span>Liste des inscrits</span>
+            <button class="btn-export" onclick="exportCSV()">Exporter CSV</button>
+        </div>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Type</th>
+                        <th>Nom</th>
+                        <th>Email</th>
+                        <th>Telephone</th>
+                        <th>Profil</th>
+                        <th>Docs</th>
+                        <th>Statut</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="usersTable">
+                </tbody>
+            </table>
+            <div class="empty-state" id="emptyState" style="display: none;">
+                <h3>Aucun inscrit pour le moment</h3>
+                <p>Les nouveaux inscrits apparaitront ici</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function loadUsers() {
+            const users = JSON.parse(localStorage.getItem('rattel_users') || '[]');
+            const tbody = document.getElementById('usersTable');
+            const emptyState = document.getElementById('emptyState');
+
+            // Stats
+            document.getElementById('totalUsers').textContent = users.length;
+            document.getElementById('particuliers').textContent = users.filter(u => u.type === 'particulier').length;
+            document.getElementById('entreprises').textContent = users.filter(u => u.type === 'entreprise').length;
+            document.getElementById('newsletters').textContent = users.filter(u => u.newsletter).length;
+
+            if (users.length === 0) {
+                tbody.innerHTML = '';
+                emptyState.style.display = 'block';
+                return;
+            }
+
+            emptyState.style.display = 'none';
+
+            tbody.innerHTML = users.map((user, index) => {
+                const profilStatus = user.profilComplete ? '<span class="status-badge status-verified">✓</span>' : '<span class="status-badge status-incomplete">-</span>';
+                const docsStatus = user.documentsComplete ? '<span class="status-badge status-verified">✓</span>' : '<span class="status-badge status-incomplete">-</span>';
+
+                let statusBadge = '<span class="status-badge status-incomplete">Incomplet</span>';
+                if (user.status === 'verified') {
+                    statusBadge = '<span class="status-badge status-verified">Verifie</span>';
+                } else if (user.profilComplete && user.documentsComplete) {
+                    statusBadge = '<span class="status-badge status-pending">En attente</span>';
+                }
+
+                const verifyBtn = (user.profilComplete && user.documentsComplete && user.status !== 'verified')
+                    ? `<button class="btn-success" onclick="verifyUser(${index})">Verifier</button>`
+                    : '';
+
+                return `
+                    <tr>
+                        <td>${new Date(user.createdAt).toLocaleDateString('fr-FR')}</td>
+                        <td><span class="badge badge-${user.type}">${user.type}</span></td>
+                        <td>${user.civilite || ''} ${user.prenom || ''} ${user.nom || ''}</td>
+                        <td>${user.email}</td>
+                        <td>${user.telephone || '-'}</td>
+                        <td>${profilStatus}</td>
+                        <td>${docsStatus}</td>
+                        <td>${statusBadge}</td>
+                        <td>${verifyBtn}<button class="btn-danger" onclick="deleteUser(${index})">Supprimer</button></td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function deleteUser(index) {
+            if (confirm('Supprimer cet utilisateur ?')) {
+                const users = JSON.parse(localStorage.getItem('rattel_users') || '[]');
+                users.splice(index, 1);
+                localStorage.setItem('rattel_users', JSON.stringify(users));
+                loadUsers();
+            }
+        }
+
+        function verifyUser(index) {
+            if (confirm('Valider la verification de cet utilisateur ?')) {
+                const users = JSON.parse(localStorage.getItem('rattel_users') || '[]');
+                users[index].status = 'verified';
+                users[index].verifiedAt = new Date().toISOString();
+                localStorage.setItem('rattel_users', JSON.stringify(users));
+                loadUsers();
+            }
+        }
+
+        function exportCSV() {
+            const users = JSON.parse(localStorage.getItem('rattel_users') || '[]');
+            if (users.length === 0) {
+                alert('Aucune donnee a exporter');
+                return;
+            }
+
+            const headers = ['Date', 'Type', 'Civilite', 'Nom', 'Prenom', 'Email', 'Telephone', 'Adresse', 'Code Postal', 'Ville', 'Newsletter', 'Parrain'];
+            const rows = users.map(u => [
+                new Date(u.createdAt).toLocaleDateString('fr-FR'),
+                u.type,
+                u.civilite,
+                u.nom,
+                u.prenom,
+                u.email,
+                u.telephone,
+                u.adresse,
+                u.codePostal,
+                u.ville,
+                u.newsletter ? 'Oui' : 'Non',
+                u.referral || ''
+            ]);
+
+            const csv = [headers, ...rows].map(row => row.join(';')).join('\n');
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `rattel_inscrits_${new Date().toISOString().split('T')[0]}.csv`;
+            link.click();
+        }
+
+        loadUsers();
+    </script>
+</body>
+</html>

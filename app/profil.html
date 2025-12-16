@@ -1,0 +1,1065 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon profil - RATTEL</title>
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .profile-hero {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--secondary-blue) 100%);
+            color: white;
+            padding: 3rem 0;
+        }
+        .profile-hero h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        .profile-hero p {
+            opacity: 0.9;
+        }
+
+        .profile-content {
+            padding: 3rem 0;
+        }
+
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 2rem;
+        }
+
+        @media (max-width: 900px) {
+            .profile-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Sidebar */
+        .profile-sidebar {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            padding: 1.5rem;
+            height: fit-content;
+        }
+
+        .profile-nav {
+            list-style: none;
+        }
+
+        .profile-nav li {
+            margin-bottom: 0.5rem;
+        }
+
+        .profile-nav a {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            color: var(--text-dark);
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .profile-nav a:hover {
+            background: var(--bg-light);
+        }
+
+        .profile-nav a.active {
+            background: linear-gradient(135deg, var(--primary-orange), var(--accent));
+            color: white;
+        }
+
+        .profile-nav .icon {
+            font-size: 1.2rem;
+        }
+
+        .completion-badge {
+            margin-left: auto;
+            font-size: 0.75rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 10px;
+        }
+
+        .badge-pending {
+            background: rgba(255, 152, 0, 0.15);
+            color: #FF9800;
+        }
+
+        .badge-complete {
+            background: rgba(76, 175, 80, 0.15);
+            color: #4CAF50;
+        }
+
+        /* Main Content */
+        .profile-main {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+
+        .profile-section-header {
+            background: linear-gradient(135deg, var(--primary-orange), var(--accent));
+            color: white;
+            padding: 1.5rem 2rem;
+        }
+
+        .profile-section-header h2 {
+            font-size: 1.3rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .profile-section-header p {
+            opacity: 0.9;
+            font-size: 0.9rem;
+        }
+
+        .profile-form {
+            padding: 2rem;
+        }
+
+        /* Form Styles */
+        .form-section {
+            margin-bottom: 2.5rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .form-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .form-section-title {
+            font-size: 1.1rem;
+            color: var(--text-dark);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .form-section-title .icon {
+            color: var(--primary-orange);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        @media (max-width: 600px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-dark);
+            font-weight: 500;
+        }
+
+        .form-group label .required {
+            color: var(--accent);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-orange);
+            box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
+        }
+
+        .form-helper {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            margin-top: 0.25rem;
+        }
+
+        /* Experience Cards */
+        .experience-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+        }
+
+        @media (max-width: 700px) {
+            .experience-cards {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .experience-card {
+            padding: 1.5rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .experience-card:hover {
+            border-color: var(--primary-orange);
+            transform: translateY(-2px);
+        }
+
+        .experience-card.selected {
+            border-color: var(--primary-orange);
+            background: rgba(255, 107, 53, 0.05);
+        }
+
+        .experience-card .icon {
+            font-size: 2rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .experience-card h4 {
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .experience-card p {
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+
+        /* Investment Checkboxes */
+        .investment-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 0.75rem;
+        }
+
+        .investment-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .investment-checkbox:hover {
+            border-color: var(--primary-orange);
+        }
+
+        .investment-checkbox.checked {
+            border-color: var(--primary-orange);
+            background: rgba(255, 107, 53, 0.05);
+        }
+
+        .investment-checkbox input {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--primary-orange);
+        }
+
+        .investment-checkbox span {
+            color: var(--text-dark);
+            font-size: 0.95rem;
+        }
+
+        /* Objectives */
+        .objectives-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 0.75rem;
+        }
+
+        .objective-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .objective-item:hover {
+            border-color: var(--primary-orange);
+        }
+
+        .objective-item.checked {
+            border-color: var(--primary-orange);
+            background: rgba(255, 107, 53, 0.05);
+        }
+
+        .objective-item input {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--primary-orange);
+        }
+
+        /* Info Box */
+        .info-box {
+            background: linear-gradient(135deg, rgba(255, 107, 53, 0.1), rgba(233, 69, 96, 0.1));
+            border-left: 4px solid var(--primary-orange);
+            padding: 1rem 1.25rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+        }
+
+        .info-box h4 {
+            color: var(--primary-orange);
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .info-box p {
+            color: var(--text-dark);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        /* Warning Box */
+        .warning-box {
+            background: rgba(255, 152, 0, 0.1);
+            border: 1px solid rgba(255, 152, 0, 0.3);
+            border-left: 4px solid #FF9800;
+            padding: 1rem 1.25rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+        }
+
+        .warning-box h4 {
+            color: #E65100;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .warning-box p {
+            color: var(--text-dark);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        /* Checkbox */
+        .checkbox-group {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin-top: 2px;
+            cursor: pointer;
+            accent-color: var(--primary-orange);
+        }
+
+        .checkbox-group label {
+            font-size: 0.9rem;
+            color: var(--text-dark);
+            line-height: 1.5;
+            cursor: pointer;
+        }
+
+        /* Button */
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-orange), var(--accent));
+            color: white;
+            border: none;
+            padding: 1rem 2.5rem;
+            border-radius: 30px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(255, 107, 53, 0.3);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid #eee;
+        }
+
+        .spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-left: 0.5rem;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .btn-primary.loading .spinner {
+            display: inline-block;
+        }
+
+        /* User Menu */
+        .user-menu {
+            position: relative;
+        }
+
+        .user-btn {
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .user-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+            min-width: 180px;
+            display: none;
+            z-index: 100;
+        }
+
+        .user-dropdown.show {
+            display: block;
+        }
+
+        .user-dropdown a {
+            display: block;
+            padding: 0.75rem 1rem;
+            color: var(--text-dark);
+            text-decoration: none;
+        }
+
+        .user-dropdown a:hover {
+            background: var(--bg-light);
+        }
+
+        .user-dropdown a.logout {
+            color: var(--accent);
+            border-top: 1px solid #eee;
+        }
+
+        /* Success Message */
+        .success-toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #4CAF50;
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            display: none;
+            z-index: 1000;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        .success-toast.show {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+    </style>
+</head>
+<body>
+    <script src="js/auth.js"></script>
+    <script>
+        const user = JSON.parse(sessionStorage.getItem('rattel_user'));
+        if (!user) {
+            window.location.href = 'connexion.html';
+        }
+    </script>
+
+    <!-- Success Toast -->
+    <div class="success-toast" id="successToast">
+        <span>Profil enregistre avec succes</span>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <div class="header-top">
+            <div class="container">
+                <span>contact@rattel.io</span>
+                <div class="user-menu">
+                    <button class="user-btn" onclick="toggleUserMenu()">
+                        <span id="userNameHeader"></span> &#9660;
+                    </button>
+                    <div class="user-dropdown" id="userDropdown">
+                        <a href="profil.html">Mon profil</a>
+                        <a href="documents.html">Mes documents</a>
+                        <a href="#" class="logout" onclick="logout()">Deconnexion</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <nav>
+            <div class="container">
+                <a href="index.html" class="logo">RATTEL <span class="beta-badge">BETA</span></a>
+                <ul class="nav-menu" id="navMenu">
+                    <li><a href="index.html">Accueil</a></li>
+                    <li><a href="projets.html">Projets</a></li>
+                    <li><a href="dashboard.html">Mon espace</a></li>
+                </ul>
+                <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Profile Hero -->
+    <section class="profile-hero">
+        <div class="container">
+            <h1>Mon profil investisseur</h1>
+            <p>Completez votre profil pour pouvoir investir sur la plateforme</p>
+        </div>
+    </section>
+
+    <!-- Profile Content -->
+    <section class="profile-content">
+        <div class="container">
+            <div class="profile-grid">
+                <!-- Sidebar -->
+                <aside class="profile-sidebar">
+                    <nav>
+                        <ul class="profile-nav">
+                            <li>
+                                <a href="dashboard.html">
+                                    <span class="icon">&#128200;</span>
+                                    Tableau de bord
+                                </a>
+                            </li>
+                            <li>
+                                <a href="profil.html" class="active">
+                                    <span class="icon">&#128100;</span>
+                                    Profil investisseur
+                                    <span class="completion-badge badge-pending" id="profilBadge">A completer</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="documents.html">
+                                    <span class="icon">&#128196;</span>
+                                    Documents KYC
+                                    <span class="completion-badge badge-pending" id="docsBadge">A completer</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="historique.html">
+                                    <span class="icon">&#128197;</span>
+                                    Historique
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </aside>
+
+                <!-- Main Content -->
+                <main class="profile-main">
+                    <div class="profile-section-header">
+                        <h2>Questionnaire investisseur</h2>
+                        <p>Ces informations sont obligatoires pour investir et nous permettent de mieux vous connaitre</p>
+                    </div>
+
+                    <form class="profile-form" id="profilForm">
+                        <!-- Experience Section -->
+                        <div class="form-section">
+                            <h3 class="form-section-title">
+                                <span class="icon">&#127891;</span>
+                                Votre experience en investissement
+                            </h3>
+
+                            <div class="form-group">
+                                <label>Quel est votre niveau d'experience ? <span class="required">*</span></label>
+                                <div class="experience-cards">
+                                    <div class="experience-card" data-level="debutant">
+                                        <div class="icon">&#127793;</div>
+                                        <h4>Debutant</h4>
+                                        <p>C'est ma premiere experience en investissement</p>
+                                    </div>
+                                    <div class="experience-card" data-level="intermediaire">
+                                        <div class="icon">&#128200;</div>
+                                        <h4>Intermediaire</h4>
+                                        <p>J'ai deja investi dans quelques produits</p>
+                                    </div>
+                                    <div class="experience-card" data-level="confirme">
+                                        <div class="icon">&#128142;</div>
+                                        <h4>Confirme</h4>
+                                        <p>Je gere activement mes investissements</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Dans quels types de placements avez-vous deja investi ?</label>
+                                <div class="investment-grid">
+                                    <label class="investment-checkbox">
+                                        <input type="checkbox" name="investments" value="livret">
+                                        <span>Livret d'epargne</span>
+                                    </label>
+                                    <label class="investment-checkbox">
+                                        <input type="checkbox" name="investments" value="assurance-vie">
+                                        <span>Assurance vie</span>
+                                    </label>
+                                    <label class="investment-checkbox">
+                                        <input type="checkbox" name="investments" value="actions">
+                                        <span>Actions / Bourse</span>
+                                    </label>
+                                    <label class="investment-checkbox">
+                                        <input type="checkbox" name="investments" value="immobilier">
+                                        <span>Immobilier</span>
+                                    </label>
+                                    <label class="investment-checkbox">
+                                        <input type="checkbox" name="investments" value="crowdfunding">
+                                        <span>Crowdfunding</span>
+                                    </label>
+                                    <label class="investment-checkbox">
+                                        <input type="checkbox" name="investments" value="crypto">
+                                        <span>Crypto-monnaies</span>
+                                    </label>
+                                    <label class="investment-checkbox">
+                                        <input type="checkbox" name="investments" value="scpi">
+                                        <span>SCPI</span>
+                                    </label>
+                                    <label class="investment-checkbox">
+                                        <input type="checkbox" name="investments" value="aucun">
+                                        <span>Aucun</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Financial Situation -->
+                        <div class="form-section">
+                            <h3 class="form-section-title">
+                                <span class="icon">&#128176;</span>
+                                Votre situation financiere
+                            </h3>
+
+                            <div class="info-box">
+                                <h4>Pourquoi ces questions ?</h4>
+                                <p>Ces informations nous permettent de vous proposer des investissements adaptes a votre situation et de nous assurer que vous n'investissez pas au-dela de vos moyens.</p>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="revenus">Revenus annuels nets <span class="required">*</span></label>
+                                    <select class="form-control" id="revenus" name="revenus" required>
+                                        <option value="">Selectionnez</option>
+                                        <option value="moins_2m">Moins de 2 000 000 XPF</option>
+                                        <option value="2m_4m">2 000 000 - 4 000 000 XPF</option>
+                                        <option value="4m_6m">4 000 000 - 6 000 000 XPF</option>
+                                        <option value="6m_10m">6 000 000 - 10 000 000 XPF</option>
+                                        <option value="plus_10m">Plus de 10 000 000 XPF</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="patrimoine">Patrimoine total estime <span class="required">*</span></label>
+                                    <select class="form-control" id="patrimoine" name="patrimoine" required>
+                                        <option value="">Selectionnez</option>
+                                        <option value="moins_5m">Moins de 5 000 000 XPF</option>
+                                        <option value="5m_15m">5 000 000 - 15 000 000 XPF</option>
+                                        <option value="15m_30m">15 000 000 - 30 000 000 XPF</option>
+                                        <option value="30m_50m">30 000 000 - 50 000 000 XPF</option>
+                                        <option value="plus_50m">Plus de 50 000 000 XPF</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="epargne">Epargne mensuelle disponible <span class="required">*</span></label>
+                                    <select class="form-control" id="epargne" name="epargne" required>
+                                        <option value="">Selectionnez</option>
+                                        <option value="moins_50k">Moins de 50 000 XPF</option>
+                                        <option value="50k_100k">50 000 - 100 000 XPF</option>
+                                        <option value="100k_200k">100 000 - 200 000 XPF</option>
+                                        <option value="200k_500k">200 000 - 500 000 XPF</option>
+                                        <option value="plus_500k">Plus de 500 000 XPF</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="montantInvestir">Montant a investir sur RATTEL <span class="required">*</span></label>
+                                    <select class="form-control" id="montantInvestir" name="montantInvestir" required>
+                                        <option value="">Selectionnez</option>
+                                        <option value="10k_50k">10 000 - 50 000 XPF</option>
+                                        <option value="50k_200k">50 000 - 200 000 XPF</option>
+                                        <option value="200k_500k">200 000 - 500 000 XPF</option>
+                                        <option value="500k_1m">500 000 - 1 000 000 XPF</option>
+                                        <option value="plus_1m">Plus de 1 000 000 XPF</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Investment Objectives -->
+                        <div class="form-section">
+                            <h3 class="form-section-title">
+                                <span class="icon">&#127919;</span>
+                                Vos objectifs d'investissement
+                            </h3>
+
+                            <div class="form-group">
+                                <label>Quels sont vos objectifs ? <span class="required">*</span></label>
+                                <div class="objectives-grid">
+                                    <label class="objective-item">
+                                        <input type="checkbox" name="objectifs" value="rendement">
+                                        <span>Recherche de rendement</span>
+                                    </label>
+                                    <label class="objective-item">
+                                        <input type="checkbox" name="objectifs" value="diversification">
+                                        <span>Diversification</span>
+                                    </label>
+                                    <label class="objective-item">
+                                        <input type="checkbox" name="objectifs" value="impact">
+                                        <span>Impact local</span>
+                                    </label>
+                                    <label class="objective-item">
+                                        <input type="checkbox" name="objectifs" value="epargne">
+                                        <span>Epargne long terme</span>
+                                    </label>
+                                    <label class="objective-item">
+                                        <input type="checkbox" name="objectifs" value="transmission">
+                                        <span>Transmission patrimoine</span>
+                                    </label>
+                                    <label class="objective-item">
+                                        <input type="checkbox" name="objectifs" value="defiscalisation">
+                                        <span>Defiscalisation</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="horizon">Horizon d'investissement <span class="required">*</span></label>
+                                <select class="form-control" id="horizon" name="horizon" required>
+                                    <option value="">Selectionnez</option>
+                                    <option value="court">Court terme (moins de 2 ans)</option>
+                                    <option value="moyen">Moyen terme (2 a 5 ans)</option>
+                                    <option value="long">Long terme (plus de 5 ans)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Risk Acknowledgment -->
+                        <div class="form-section">
+                            <h3 class="form-section-title">
+                                <span class="icon">&#9888;&#65039;</span>
+                                Connaissance des risques
+                            </h3>
+
+                            <div class="warning-box">
+                                <h4>Investir comporte des risques</h4>
+                                <p>Le financement participatif presente des risques, notamment de perte en capital partielle ou totale. Les investissements realises via RATTEL ne sont pas garantis et ne beneficient pas de la garantie des depots.</p>
+                            </div>
+
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="risque1" name="risque1" required>
+                                <label for="risque1">
+                                    Je comprends que je peux perdre tout ou partie de mon investissement <span class="required">*</span>
+                                </label>
+                            </div>
+
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="risque2" name="risque2" required>
+                                <label for="risque2">
+                                    Je comprends que mes investissements sont illiquides et bloques pendant la duree du projet <span class="required">*</span>
+                                </label>
+                            </div>
+
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="risque3" name="risque3" required>
+                                <label for="risque3">
+                                    Je m'engage a ne pas investir plus de 10% de mon patrimoine global en financement participatif <span class="required">*</span>
+                                </label>
+                            </div>
+
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="risque4" name="risque4" required>
+                                <label for="risque4">
+                                    J'atteste que les informations fournies sont exactes et m'engage a les mettre a jour si necessaire <span class="required">*</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="btn-primary" id="submitBtn">
+                                Enregistrer mon profil
+                                <span class="spinner"></span>
+                            </button>
+                        </div>
+                    </form>
+                </main>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-bottom" style="border-top: none; padding-top: 0;">
+                <p>&copy; 2025 RATTEL - Tous droits reserves</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Load user data
+        const userData = JSON.parse(sessionStorage.getItem('rattel_user'));
+        if (userData) {
+            document.getElementById('userNameHeader').textContent = userData.prenom;
+        }
+
+        // Load existing profile data
+        function loadProfileData() {
+            const users = JSON.parse(localStorage.getItem('rattel_users') || '[]');
+            const currentUser = users.find(u => u.email === userData.email);
+
+            if (currentUser && currentUser.profil) {
+                const profil = currentUser.profil;
+
+                // Experience level
+                if (profil.experience) {
+                    document.querySelector(`.experience-card[data-level="${profil.experience}"]`)?.classList.add('selected');
+                }
+
+                // Investments
+                if (profil.investments) {
+                    profil.investments.forEach(inv => {
+                        const checkbox = document.querySelector(`input[name="investments"][value="${inv}"]`);
+                        if (checkbox) {
+                            checkbox.checked = true;
+                            checkbox.closest('.investment-checkbox').classList.add('checked');
+                        }
+                    });
+                }
+
+                // Selects
+                ['revenus', 'patrimoine', 'epargne', 'montantInvestir', 'horizon'].forEach(field => {
+                    if (profil[field]) {
+                        document.getElementById(field).value = profil[field];
+                    }
+                });
+
+                // Objectives
+                if (profil.objectifs) {
+                    profil.objectifs.forEach(obj => {
+                        const checkbox = document.querySelector(`input[name="objectifs"][value="${obj}"]`);
+                        if (checkbox) {
+                            checkbox.checked = true;
+                            checkbox.closest('.objective-item').classList.add('checked');
+                        }
+                    });
+                }
+
+                // Risk checkboxes
+                if (profil.risquesAcceptes) {
+                    document.getElementById('risque1').checked = true;
+                    document.getElementById('risque2').checked = true;
+                    document.getElementById('risque3').checked = true;
+                    document.getElementById('risque4').checked = true;
+                }
+            }
+
+            // Update badges
+            if (currentUser?.profilComplete) {
+                document.getElementById('profilBadge').textContent = 'Complete';
+                document.getElementById('profilBadge').classList.remove('badge-pending');
+                document.getElementById('profilBadge').classList.add('badge-complete');
+            }
+
+            if (currentUser?.documentsComplete) {
+                document.getElementById('docsBadge').textContent = 'Complete';
+                document.getElementById('docsBadge').classList.remove('badge-pending');
+                document.getElementById('docsBadge').classList.add('badge-complete');
+            }
+        }
+
+        loadProfileData();
+
+        // Experience card selection
+        document.querySelectorAll('.experience-card').forEach(card => {
+            card.addEventListener('click', function() {
+                document.querySelectorAll('.experience-card').forEach(c => c.classList.remove('selected'));
+                this.classList.add('selected');
+            });
+        });
+
+        // Investment checkboxes styling
+        document.querySelectorAll('.investment-checkbox input').forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                this.closest('.investment-checkbox').classList.toggle('checked', this.checked);
+
+                // If "Aucun" is selected, uncheck others
+                if (this.value === 'aucun' && this.checked) {
+                    document.querySelectorAll('.investment-checkbox input').forEach(cb => {
+                        if (cb.value !== 'aucun') {
+                            cb.checked = false;
+                            cb.closest('.investment-checkbox').classList.remove('checked');
+                        }
+                    });
+                } else if (this.value !== 'aucun' && this.checked) {
+                    const aucunCheckbox = document.querySelector('.investment-checkbox input[value="aucun"]');
+                    aucunCheckbox.checked = false;
+                    aucunCheckbox.closest('.investment-checkbox').classList.remove('checked');
+                }
+            });
+        });
+
+        // Objective checkboxes styling
+        document.querySelectorAll('.objective-item input').forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                this.closest('.objective-item').classList.toggle('checked', this.checked);
+            });
+        });
+
+        // Mobile menu
+        document.getElementById('mobileMenuToggle').addEventListener('click', function() {
+            document.getElementById('navMenu').classList.toggle('active');
+        });
+
+        // User dropdown
+        function toggleUserMenu() {
+            document.getElementById('userDropdown').classList.toggle('show');
+        }
+
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.user-menu')) {
+                document.getElementById('userDropdown').classList.remove('show');
+            }
+        });
+
+        function logout() {
+            sessionStorage.removeItem('rattel_user');
+            window.location.href = 'connexion.html';
+        }
+
+        // Form submission
+        document.getElementById('profilForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // Validation
+            const selectedExperience = document.querySelector('.experience-card.selected');
+            if (!selectedExperience) {
+                alert('Veuillez selectionner votre niveau d\'experience');
+                return;
+            }
+
+            const objectives = document.querySelectorAll('input[name="objectifs"]:checked');
+            if (objectives.length === 0) {
+                alert('Veuillez selectionner au moins un objectif d\'investissement');
+                return;
+            }
+
+            const requiredFields = ['revenus', 'patrimoine', 'epargne', 'montantInvestir', 'horizon'];
+            for (const field of requiredFields) {
+                if (!document.getElementById(field).value) {
+                    alert('Veuillez remplir tous les champs obligatoires');
+                    return;
+                }
+            }
+
+            const riskCheckboxes = ['risque1', 'risque2', 'risque3', 'risque4'];
+            for (const checkbox of riskCheckboxes) {
+                if (!document.getElementById(checkbox).checked) {
+                    alert('Veuillez accepter toutes les conditions relatives aux risques');
+                    return;
+                }
+            }
+
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.classList.add('loading');
+            submitBtn.disabled = true;
+
+            // Collect form data
+            const investments = Array.from(document.querySelectorAll('input[name="investments"]:checked')).map(cb => cb.value);
+            const objectifsList = Array.from(objectives).map(cb => cb.value);
+
+            const profileData = {
+                experience: selectedExperience.dataset.level,
+                investments: investments,
+                revenus: document.getElementById('revenus').value,
+                patrimoine: document.getElementById('patrimoine').value,
+                epargne: document.getElementById('epargne').value,
+                montantInvestir: document.getElementById('montantInvestir').value,
+                objectifs: objectifsList,
+                horizon: document.getElementById('horizon').value,
+                risquesAcceptes: true,
+                updatedAt: new Date().toISOString()
+            };
+
+            // Save to localStorage
+            let users = JSON.parse(localStorage.getItem('rattel_users') || '[]');
+            const userIndex = users.findIndex(u => u.email === userData.email);
+
+            if (userIndex !== -1) {
+                users[userIndex].profil = profileData;
+                users[userIndex].profilComplete = true;
+                localStorage.setItem('rattel_users', JSON.stringify(users));
+            }
+
+            setTimeout(() => {
+                submitBtn.classList.remove('loading');
+                submitBtn.disabled = false;
+
+                // Show success toast
+                const toast = document.getElementById('successToast');
+                toast.classList.add('show');
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 3000);
+
+                // Update badge
+                document.getElementById('profilBadge').textContent = 'Complete';
+                document.getElementById('profilBadge').classList.remove('badge-pending');
+                document.getElementById('profilBadge').classList.add('badge-complete');
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

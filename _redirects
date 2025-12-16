@@ -1,0 +1,11 @@
+# Netlify Redirects
+# Force HTTPS
+http://rattel.io/* https://rattel.io/:splat 301!
+http://www.rattel.io/* https://rattel.io/:splat 301!
+https://www.rattel.io/* https://rattel.io/:splat 301!
+
+# Handle SPA routing for app folder
+/app/* /app/:splat 200
+
+# Custom 404
+/* /index.html 404

@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comment ca marche - RATTEL</title>
+    <meta name="description" content="Decouvrez comment fonctionne le financement participatif avec RATTEL.">
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .page-hero {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--secondary-blue) 100%);
+            color: white;
+            padding: 4rem 0;
+            text-align: center;
+        }
+        .page-hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        .page-hero p {
+            opacity: 0.9;
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .steps-section {
+            padding: 5rem 0;
+            background: var(--bg-light);
+        }
+
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .step-card {
+            background: white;
+            padding: 2.5rem 2rem;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            text-align: center;
+            position: relative;
+        }
+
+        .step-number {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary-orange), var(--accent));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: white;
+        }
+
+        .step-title {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: var(--text-dark);
+        }
+
+        .step-description {
+            color: var(--text-light);
+            line-height: 1.8;
+        }
+
+        .info-section {
+            padding: 5rem 0;
+            background: white;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .info-content h2 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: var(--text-dark);
+        }
+
+        .info-content p {
+            color: var(--text-light);
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+
+        .info-list {
+            list-style: none;
+            margin: 1.5rem 0;
+        }
+
+        .info-list li {
+            padding: 0.75rem 0;
+            padding-left: 2rem;
+            position: relative;
+            color: var(--text-dark);
+        }
+
+        .info-list li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--primary-orange);
+            font-weight: bold;
+        }
+
+        .info-image {
+            background: linear-gradient(135deg, var(--primary-dark), var(--secondary-blue));
+            border-radius: 15px;
+            height: 350px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 4rem;
+        }
+
+        .faq-section {
+            padding: 5rem 0;
+            background: var(--bg-light);
+        }
+
+        .faq-list {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            background: white;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .faq-question {
+            padding: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .faq-question:hover {
+            color: var(--primary-orange);
+        }
+
+        .faq-arrow {
+            transition: transform 0.3s;
+        }
+
+        .faq-item.active .faq-arrow {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            padding: 0 1.5rem;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s;
+            color: var(--text-light);
+            line-height: 1.8;
+        }
+
+        .faq-item.active .faq-answer {
+            padding: 0 1.5rem 1.5rem;
+            max-height: 500px;
+        }
+
+        @media (max-width: 768px) {
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+            .info-image {
+                order: -1;
+                height: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <script src="js/auth.js"></script>
+
+    <!-- Header -->
+    <header>
+        <div class="header-top">
+            <div class="container">
+                <span>contact@rattel.io | +687 XX.XX.XX</span>
+                <div>
+                    <a href="#" onclick="rattelLogout(); return false;">Deconnexion</a>
+                </div>
+            </div>
+        </div>
+        <nav>
+            <div class="container">
+                <a href="index.html" class="logo">RATTEL <span class="beta-badge">BETA</span></a>
+                <ul class="nav-menu" id="navMenu">
+                    <li><a href="index.html">Accueil</a></li>
+                    <li><a href="projets.html">Projets</a></li>
+                    <li><a href="comment-ca-marche.html" class="active">Comment ca marche</a></li>
+                    <li><a href="se-financer.html">Se financer</a></li>
+                    <li><a href="a-propos.html">A propos</a></li>
+                </ul>
+                <div class="nav-actions">
+                    <a href="inscription.html" class="btn-nav">Creer un compte</a>
+                </div>
+                <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Page Hero -->
+    <section class="page-hero">
+        <div class="container">
+            <h1>Comment ca marche ?</h1>
+            <p>Investir dans l'economie caledonienne n'a jamais ete aussi simple. Decouvrez les etapes pour commencer.</p>
+        </div>
+    </section>
+
+    <!-- Steps Section -->
+    <section class="steps-section">
+        <div class="container">
+            <h2 class="section-title">Investir en 4 etapes</h2>
+            <div class="steps-grid">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <h3 class="step-title">Creez votre compte</h3>
+                    <p class="step-description">Inscription gratuite en quelques minutes. Verifiez votre identite pour commencer a investir en toute securite.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <h3 class="step-title">Decouvrez les projets</h3>
+                    <p class="step-description">Parcourez les opportunites d'investissement. Analysez les projets, les rendements et les garanties proposees.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <h3 class="step-title">Investissez</h3>
+                    <p class="step-description">Choisissez le montant a investir (a partir de 10 000 XPF) et validez votre participation en quelques clics.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">4</div>
+                    <h3 class="step-title">Recevez vos gains</h3>
+                    <p class="step-description">Suivez l'evolution de vos investissements et recevez vos remboursements selon l'echeancier prevu.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Info Section - Investisseurs -->
+    <section class="info-section">
+        <div class="container">
+            <div class="info-grid">
+                <div class="info-content">
+                    <h2>Pour les investisseurs</h2>
+                    <p>Faites fructifier votre epargne tout en soutenant l'economie locale. Le financement participatif vous permet d'investir directement dans des projets concrets.</p>
+                    <ul class="info-list">
+                        <li>Rendements attractifs de 7% a 12% par an</li>
+                        <li>Investissement a partir de 10 000 XPF</li>
+                        <li>Diversification de votre portefeuille</li>
+                        <li>Impact direct sur l'economie caledonienne</li>
+                        <li>Suivi en temps reel de vos investissements</li>
+                    </ul>
+                    <a href="projets.html" class="btn-primary btn-small">Voir les projets</a>
+                </div>
+                <div class="info-image">📈</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Info Section - Porteurs de projet -->
+    <section class="info-section" style="background: var(--bg-light);">
+        <div class="container">
+            <div class="info-grid">
+                <div class="info-image">🏗️</div>
+                <div class="info-content">
+                    <h2>Pour les porteurs de projet</h2>
+                    <p>Financez votre projet grace a la communaute. RATTEL vous accompagne de A a Z pour structurer votre levee de fonds.</p>
+                    <ul class="info-list">
+                        <li>Alternative au financement bancaire classique</li>
+                        <li>Accompagnement personnalise</li>
+                        <li>Visibilite aupres d'investisseurs locaux</li>
+                        <li>Flexibilite des conditions de remboursement</li>
+                        <li>Communication simplifiee avec vos investisseurs</li>
+                    </ul>
+                    <a href="se-financer.html" class="btn-primary btn-small">Proposer un projet</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq-section">
+        <div class="container">
+            <h2 class="section-title">Questions frequentes</h2>
+            <div class="faq-list">
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>Quel est le montant minimum pour investir ?</span>
+                        <span class="faq-arrow">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        Le montant minimum d'investissement est de 10 000 XPF par projet. Cela permet a chacun de participer au financement de l'economie locale, quel que soit son budget.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>Quels sont les risques ?</span>
+                        <span class="faq-arrow">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        Comme tout investissement, le financement participatif comporte des risques, notamment le risque de perte en capital et le risque d'illiquidite. Nous selectionnons rigoureusement les projets et mettons en place des garanties adaptees pour minimiser ces risques.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>Comment sont selectionnes les projets ?</span>
+                        <span class="faq-arrow">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        Chaque projet fait l'objet d'une analyse approfondie : etude du business plan, analyse financiere, verification des garanties, rencontre avec les porteurs de projet. Seuls les projets repondant a nos criteres de qualite sont presentes sur la plateforme.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>Quand vais-je recevoir mes remboursements ?</span>
+                        <span class="faq-arrow">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        Les modalites de remboursement varient selon les projets : mensuel, trimestriel ou in fine. Ces informations sont clairement indiquees sur la fiche de chaque projet avant votre investissement.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>Puis-je revendre mon investissement ?</span>
+                        <span class="faq-arrow">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        Les investissements en financement participatif sont generalement illiquides, ce qui signifie que vous ne pouvez pas les revendre avant l'echeance. Il est donc important d'investir uniquement des sommes dont vous n'avez pas besoin a court terme.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section">
+        <div class="container">
+            <h2>Pret a vous lancer ?</h2>
+            <p>Creez votre compte gratuitement et decouvrez les projets disponibles</p>
+            <a href="inscription.html" class="btn-white">Creer mon compte</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-column">
+                    <h3>RATTEL</h3>
+                    <p>La premiere plateforme de financement participatif 100% dediee a la Nouvelle-Caledonie.</p>
+                </div>
+                <div class="footer-column">
+                    <h3>Investir</h3>
+                    <ul>
+                        <li><a href="projets.html">Tous les projets</a></li>
+                        <li><a href="comment-ca-marche.html">Comment ca marche</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>A propos</h3>
+                    <ul>
+                        <li><a href="a-propos.html">Qui sommes-nous</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 RATTEL - Tous droits reserves</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('mobileMenuToggle').addEventListener('click', function() {
+            document.getElementById('navMenu').classList.toggle('active');
+        });
+
+        // FAQ accordion
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', function() {
+                const item = this.parentElement;
+                const wasActive = item.classList.contains('active');
+
+                // Close all
+                document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active'));
+
+                // Open clicked if it wasn't active
+                if (!wasActive) {
+                    item.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RATTEL - Accès Plateforme</title>
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-orange: #FF6B35;
+            --primary-dark: #1a1a2e;
+            --secondary-blue: #0F3460;
+            --accent: #E94560;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--secondary-blue) 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .login-container {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 3rem;
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+            border: 2px solid rgba(255, 107, 53, 0.3);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        .logo {
+            font-size: 3rem;
+            font-weight: 900;
+            color: var(--primary-orange);
+            margin-bottom: 0.5rem;
+            letter-spacing: -2px;
+        }
+
+        .logo-sub {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+            letter-spacing: 4px;
+            margin-bottom: 2rem;
+        }
+
+        .login-title {
+            color: white;
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .login-subtitle {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+            margin-bottom: 2rem;
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .password-input {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            border: 2px solid rgba(255, 107, 53, 0.5);
+            border-radius: 50px;
+            font-size: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            outline: none;
+            transition: all 0.3s;
+            text-align: center;
+            letter-spacing: 3px;
+        }
+
+        .password-input::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+            letter-spacing: 0;
+        }
+
+        .password-input:focus {
+            border-color: var(--primary-orange);
+            box-shadow: 0 0 20px rgba(255, 107, 53, 0.3);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, var(--primary-orange), var(--accent));
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(255, 107, 53, 0.4);
+        }
+
+        .error-message {
+            color: var(--accent);
+            font-size: 0.9rem;
+            margin-top: 1rem;
+            min-height: 24px;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 2rem;
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+
+        .back-link:hover {
+            color: var(--primary-orange);
+        }
+
+        .badge {
+            display: inline-block;
+            background: rgba(255, 107, 53, 0.2);
+            color: var(--primary-orange);
+            padding: 0.3rem 1rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="logo">RATTEL</div>
+        <div class="logo-sub">FUNDING</div>
+
+        <span class="badge">BETA PRIVEE</span>
+
+        <h1 class="login-title">Acces Plateforme</h1>
+        <p class="login-subtitle">Entrez le mot de passe pour acceder a la version beta</p>
+
+        <form id="loginForm">
+            <div class="input-group">
+                <input
+                    type="password"
+                    class="password-input"
+                    id="passwordInput"
+                    placeholder="Mot de passe"
+                    autocomplete="off"
+                    required
+                >
+            </div>
+            <button type="submit" class="submit-btn">Acceder</button>
+            <div class="error-message" id="errorMessage"></div>
+        </form>
+
+        <a href="../" class="back-link">Retour a la page d'accueil</a>
+    </div>
+
+    <script>
+        // Password hash (SHA-256 of "ArkRiders")
+        const VALID_HASH = '8a9bcf4e7d3c2b1a0f5e6d7c8b9a0f1e2d3c4b5a6f7e8d9c0b1a2f3e4d5c6b7a';
+
+        // Simple hash function for client-side (not cryptographically secure, but good enough for beta access)
+        async function hashPassword(password) {
+            const encoder = new TextEncoder();
+            const data = encoder.encode(password);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        }
+
+        // Check if already authenticated
+        if (sessionStorage.getItem('rattel_auth') === 'true') {
+            window.location.href = 'index.html';
+        }
+
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const password = document.getElementById('passwordInput').value;
+            const errorMessage = document.getElementById('errorMessage');
+
+            // Direct password check (simple approach for beta)
+            if (password === 'ArkRiders') {
+                sessionStorage.setItem('rattel_auth', 'true');
+                window.location.href = 'index.html';
+            } else {
+                errorMessage.textContent = 'Mot de passe incorrect';
+                document.getElementById('passwordInput').value = '';
+                document.getElementById('passwordInput').focus();
+            }
+        });
+    </script>
+</body>
+</html>

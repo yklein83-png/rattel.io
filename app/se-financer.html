@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Se financer - RATTEL</title>
+    <meta name="description" content="Financez votre projet grace au financement participatif avec RATTEL.">
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .page-hero {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--secondary-blue) 100%);
+            color: white;
+            padding: 4rem 0;
+            text-align: center;
+        }
+        .page-hero h1 { font-size: 2.5rem; margin-bottom: 1rem; }
+        .page-hero p { opacity: 0.9; font-size: 1.1rem; max-width: 600px; margin: 0 auto; }
+
+        .benefits-section {
+            padding: 5rem 0;
+            background: white;
+        }
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+        .benefit-card {
+            background: var(--bg-light);
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+        }
+        .benefit-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        .benefit-title {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-dark);
+        }
+        .benefit-description {
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+
+        .process-section {
+            padding: 5rem 0;
+            background: var(--bg-light);
+        }
+        .process-timeline {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        .process-step {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+        .process-step::before {
+            content: '';
+            position: absolute;
+            left: 25px;
+            top: 60px;
+            width: 2px;
+            height: calc(100% + 1rem);
+            background: var(--primary-orange);
+            opacity: 0.3;
+        }
+        .process-step:last-child::before {
+            display: none;
+        }
+        .step-number {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary-orange), var(--accent));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            color: white;
+            flex-shrink: 0;
+            font-size: 1.2rem;
+        }
+        .step-content h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-dark);
+        }
+        .step-content p {
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+
+        .criteria-section {
+            padding: 5rem 0;
+            background: white;
+        }
+        .criteria-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: start;
+        }
+        .criteria-box {
+            background: var(--bg-light);
+            padding: 2rem;
+            border-radius: 15px;
+        }
+        .criteria-box h3 {
+            color: var(--text-dark);
+            margin-bottom: 1.5rem;
+            font-size: 1.3rem;
+        }
+        .criteria-list {
+            list-style: none;
+        }
+        .criteria-list li {
+            padding: 0.75rem 0;
+            padding-left: 2rem;
+            position: relative;
+            color: var(--text-dark);
+            border-bottom: 1px solid #eee;
+        }
+        .criteria-list li:last-child {
+            border-bottom: none;
+        }
+        .criteria-list li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--success);
+            font-weight: bold;
+        }
+        .criteria-list.excluded li::before {
+            content: '✗';
+            color: var(--danger);
+        }
+
+        .contact-section {
+            padding: 5rem 0;
+            background: var(--bg-light);
+        }
+        .contact-form {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 3rem;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+        }
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+        .form-control {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 2px solid #eee;
+            border-radius: 8px;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        .form-control:focus {
+            border-color: var(--primary-orange);
+        }
+        textarea.form-control {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        @media (max-width: 768px) {
+            .criteria-grid { grid-template-columns: 1fr; }
+            .process-step { gap: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <script src="js/auth.js"></script>
+
+    <!-- Header -->
+    <header>
+        <div class="header-top">
+            <div class="container">
+                <span>contact@rattel.io | +687 XX.XX.XX</span>
+                <div><a href="#" onclick="rattelLogout(); return false;">Deconnexion</a></div>
+            </div>
+        </div>
+        <nav>
+            <div class="container">
+                <a href="index.html" class="logo">RATTEL <span class="beta-badge">BETA</span></a>
+                <ul class="nav-menu" id="navMenu">
+                    <li><a href="index.html">Accueil</a></li>
+                    <li><a href="projets.html">Projets</a></li>
+                    <li><a href="comment-ca-marche.html">Comment ca marche</a></li>
+                    <li><a href="se-financer.html" class="active">Se financer</a></li>
+                    <li><a href="a-propos.html">A propos</a></li>
+                </ul>
+                <div class="nav-actions">
+                    <a href="inscription.html" class="btn-nav">Creer un compte</a>
+                </div>
+                <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Page Hero -->
+    <section class="page-hero">
+        <div class="container">
+            <h1>Financez votre projet</h1>
+            <p>Le financement participatif, une alternative flexible au credit bancaire pour developper votre activite en Nouvelle-Caledonie</p>
+        </div>
+    </section>
+
+    <!-- Benefits Section -->
+    <section class="benefits-section">
+        <div class="container">
+            <h2 class="section-title">Pourquoi choisir RATTEL ?</h2>
+            <div class="benefits-grid">
+                <div class="benefit-card">
+                    <div class="benefit-icon">⚡</div>
+                    <h3 class="benefit-title">Rapidite</h3>
+                    <p class="benefit-description">Obtenez une reponse en 48h et lancez votre collecte en quelques semaines seulement.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">🎯</div>
+                    <h3 class="benefit-title">Flexibilite</h3>
+                    <p class="benefit-description">Conditions adaptees a votre projet : duree, taux, modalites de remboursement sur mesure.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">📢</div>
+                    <h3 class="benefit-title">Visibilite</h3>
+                    <p class="benefit-description">Beneficiez d'une exposition aupres d'investisseurs locaux engages dans l'economie caledonienne.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">🤝</div>
+                    <h3 class="benefit-title">Accompagnement</h3>
+                    <p class="benefit-description">Notre equipe vous guide a chaque etape, de la structuration a la communication.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Process Section -->
+    <section class="process-section">
+        <div class="container">
+            <h2 class="section-title">Comment ca marche ?</h2>
+            <div class="process-timeline">
+                <div class="process-step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>Deposez votre dossier</h3>
+                        <p>Remplissez le formulaire avec les informations sur votre projet : montant recherche, utilisation des fonds, business plan.</p>
+                    </div>
+                </div>
+                <div class="process-step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>Analyse du projet</h3>
+                        <p>Notre equipe etudie votre dossier sous 48h et vous contacte pour echanger sur votre projet et repondre a vos questions.</p>
+                    </div>
+                </div>
+                <div class="process-step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>Structuration de l'offre</h3>
+                        <p>Ensemble, nous definissons les conditions optimales : montant, taux, duree, garanties et modalites de remboursement.</p>
+                    </div>
+                </div>
+                <div class="process-step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h3>Lancement de la collecte</h3>
+                        <p>Votre projet est publie sur la plateforme. Les investisseurs peuvent participer pendant la periode de collecte.</p>
+                    </div>
+                </div>
+                <div class="process-step">
+                    <div class="step-number">5</div>
+                    <div class="step-content">
+                        <h3>Deblocage des fonds</h3>
+                        <p>Une fois l'objectif atteint, les fonds sont verses sur votre compte. Vous pouvez realiser votre projet !</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Criteria Section -->
+    <section class="criteria-section">
+        <div class="container">
+            <h2 class="section-title">Criteres d'eligibilite</h2>
+            <div class="criteria-grid">
+                <div class="criteria-box">
+                    <h3>Projets eligibles</h3>
+                    <ul class="criteria-list">
+                        <li>Entreprise immatriculee en Nouvelle-Caledonie</li>
+                        <li>Minimum 2 ans d'activite (ou garanties solides)</li>
+                        <li>Projet concret avec plan de financement</li>
+                        <li>Capacite de remboursement demontree</li>
+                        <li>Secteurs : immobilier, agriculture, commerce, industrie, services</li>
+                    </ul>
+                </div>
+                <div class="criteria-box">
+                    <h3>Projets non eligibles</h3>
+                    <ul class="criteria-list excluded">
+                        <li>Entreprises en difficulte financiere</li>
+                        <li>Projets speculatifs ou a haut risque</li>
+                        <li>Activites illegales ou non ethiques</li>
+                        <li>Refinancement de dettes existantes</li>
+                        <li>Projets sans garanties minimales</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Form Section -->
+    <section class="contact-section">
+        <div class="container">
+            <h2 class="section-title">Proposer votre projet</h2>
+            <div class="contact-form">
+                <form id="projectForm">
+                    <div class="form-group">
+                        <label>Nom de l'entreprise *</label>
+                        <input type="text" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Votre nom *</label>
+                        <input type="text" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email *</label>
+                        <input type="email" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Telephone</label>
+                        <input type="tel" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>Montant recherche (XPF) *</label>
+                        <input type="text" class="form-control" placeholder="Ex: 5 000 000" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Description du projet *</label>
+                        <textarea class="form-control" placeholder="Decrivez votre projet et l'utilisation prevue des fonds..." required></textarea>
+                    </div>
+                    <button type="submit" class="btn-primary" style="width: 100%;">Envoyer ma demande</button>
+                </form>
+                <p class="mt-2 text-center" style="color: var(--text-light); font-size: 0.9rem;">
+                    Notre equipe vous recontactera sous 48h ouvrables.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-column">
+                    <h3>RATTEL</h3>
+                    <p>La premiere plateforme de financement participatif 100% dediee a la Nouvelle-Caledonie.</p>
+                </div>
+                <div class="footer-column">
+                    <h3>Liens utiles</h3>
+                    <ul>
+                        <li><a href="projets.html">Projets</a></li>
+                        <li><a href="comment-ca-marche.html">Comment ca marche</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 RATTEL - Tous droits reserves</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('mobileMenuToggle').addEventListener('click', function() {
+            document.getElementById('navMenu').classList.toggle('active');
+        });
+
+        document.getElementById('projectForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Merci pour votre demande ! Notre equipe vous contactera sous 48h.');
+            this.reset();
+        });
+    </script>
+</body>
+</html>
