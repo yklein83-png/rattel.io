@@ -9,11 +9,37 @@
     --primary-dark: #1a1a2e;
     --secondary-blue: #0F3460;
     --accent: #E94560;
+
+    /* Dark mode (default) */
+    --bg-gradient-start: #1a1a2e;
+    --bg-gradient-end: #0F3460;
+    --text-primary: #ffffff;
+    --text-secondary: rgba(255, 255, 255, 0.8);
+    --text-muted: rgba(255, 255, 255, 0.5);
+    --card-bg: rgba(255, 255, 255, 0.05);
+    --card-border: rgba(255, 107, 53, 0.3);
+    --input-bg: #ffffff;
+    --input-text: #1a1a2e;
+    --game-bg: #0f0f23;
+}
+
+/* Light mode */
+[data-theme="light"] {
+    --bg-gradient-start: #f0f4f8;
+    --bg-gradient-end: #e2e8f0;
+    --text-primary: #1a1a2e;
+    --text-secondary: #4a5568;
+    --text-muted: #718096;
+    --card-bg: rgba(255, 255, 255, 0.9);
+    --card-border: rgba(255, 107, 53, 0.4);
+    --input-bg: #ffffff;
+    --input-text: #1a1a2e;
+    --game-bg: #1a1a2e;
 }
 
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background: linear-gradient(135deg, var(--primary-dark) 0%, var(--secondary-blue) 100%);
+    background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -22,6 +48,7 @@ body {
     position: relative;
     overflow-x: hidden;
     padding: 1rem;
+    transition: background 0.3s ease;
 }
 
 .container {
@@ -44,27 +71,29 @@ body {
 
 .logo-sub {
     font-size: clamp(0.8rem, 2.5vw, 1.1rem);
-    color: rgba(255, 255, 255, 0.8);
+    color: var(--text-secondary);
     letter-spacing: clamp(3px, 1.5vw, 6px);
     margin-bottom: 2rem;
+    transition: color 0.3s ease;
 }
 
 /* Game Area */
 .game-container {
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--card-bg);
     border-radius: 15px;
     padding: clamp(15px, 3vw, 30px);
     backdrop-filter: blur(10px);
     box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-    border: 2px solid rgba(255, 107, 53, 0.3);
+    border: 2px solid var(--card-border);
     margin: 0 auto;
+    transition: background 0.3s ease, border-color 0.3s ease;
 }
 
 .game-screen {
     width: 100%;
     max-width: 600px;
     height: 250px;
-    background: #0f0f23;
+    background: var(--game-bg);
     border-radius: 12px;
     position: relative;
     overflow: hidden;
@@ -82,7 +111,7 @@ body {
 .game-canvas {
     display: block;
     margin: 0 auto;
-    background: #0f0f23;
+    background: var(--game-bg);
     border-radius: 10px;
     max-width: 100%;
     height: auto;
@@ -140,11 +169,12 @@ body {
 
 /* Message */
 .message {
-    color: white;
+    color: var(--text-primary);
     font-size: clamp(1rem, 3vw, 1.3rem);
     margin-top: 2rem;
     line-height: 1.8;
     padding: 0 1rem;
+    transition: color 0.3s ease;
 }
 
 .highlight {
@@ -217,13 +247,14 @@ body {
 }
 
 .rgpd-notice {
-    color: rgba(255, 255, 255, 0.5);
+    color: var(--text-muted);
     font-size: clamp(0.65rem, 1.8vw, 0.75rem);
     margin-top: 0.8rem;
     max-width: 500px;
     margin-left: auto;
     margin-right: auto;
     line-height: 1.4;
+    transition: color 0.3s ease;
 }
 
 /* Loading bar */
@@ -251,9 +282,10 @@ body {
 
 /* Instructions */
 .instructions {
-    color: rgba(255, 255, 255, 0.6);
+    color: var(--text-muted);
     font-size: clamp(0.75rem, 2vw, 0.85rem);
     margin-top: 1rem;
+    transition: color 0.3s ease;
 }
 
 /* Responsive adjustments */
@@ -334,4 +366,54 @@ body {
     background: rgba(255, 107, 53, 0.3);
     border-color: rgba(255, 107, 53, 0.8);
     transform: scale(1.1);
+}
+
+/* Theme toggle button */
+.theme-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 2px solid var(--card-border);
+    background: var(--card-bg);
+    backdrop-filter: blur(10px);
+    color: var(--text-primary);
+    font-size: 24px;
+    cursor: pointer;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.theme-toggle:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(255, 107, 53, 0.3);
+    border-color: var(--primary-orange);
+}
+
+.theme-toggle .icon-sun,
+.theme-toggle .icon-moon {
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* Show moon in dark mode, sun in light mode */
+.theme-toggle .icon-sun {
+    display: none;
+}
+
+.theme-toggle .icon-moon {
+    display: block;
+}
+
+[data-theme="light"] .theme-toggle .icon-sun {
+    display: block;
+}
+
+[data-theme="light"] .theme-toggle .icon-moon {
+    display: none;
 }

@@ -23,6 +23,25 @@
     --success: #4CAF50;
     --warning: #FF9800;
     --danger: #E94560;
+
+    /* Dark mode colors (used by specific components) */
+    --header-bg: var(--white);
+    --body-bg: var(--bg-light);
+    --card-bg: var(--white);
+    --nav-text: var(--text-dark);
+}
+
+/* Light mode is default for app, dark mode is alternative */
+[data-theme="dark"] {
+    --header-bg: #1e1e2f;
+    --body-bg: #121220;
+    --card-bg: #1e1e2f;
+    --bg-light: #252538;
+    --white: #1e1e2f;
+    --text-dark: #e0e0e0;
+    --text-light: #a0a0a0;
+    --nav-text: #e0e0e0;
+    --shadow: 0 10px 30px rgba(0,0,0,0.3);
 }
 
 body {
@@ -30,7 +49,8 @@ body {
     color: var(--text-dark);
     line-height: 1.6;
     overflow-x: hidden;
-    background: var(--bg-light);
+    background: var(--body-bg);
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* ============================================
@@ -827,4 +847,48 @@ footer {
         width: 100%;
         text-align: center;
     }
+}
+
+/* ============================================
+   THEME TOGGLE
+   ============================================ */
+.theme-toggle {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 2px solid var(--primary-orange);
+    background: var(--card-bg, var(--white));
+    color: var(--text-dark);
+    font-size: 24px;
+    cursor: pointer;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+}
+
+.theme-toggle:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(255, 107, 53, 0.3);
+}
+
+.theme-toggle .icon-sun {
+    display: block;
+}
+
+.theme-toggle .icon-moon {
+    display: none;
+}
+
+[data-theme="dark"] .theme-toggle .icon-sun {
+    display: none;
+}
+
+[data-theme="dark"] .theme-toggle .icon-moon {
+    display: block;
 }
