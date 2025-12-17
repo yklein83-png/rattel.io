@@ -538,6 +538,9 @@
     </style>
 </head>
 <body>
+    <!-- Supabase SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase.js"></script>
     <script src="js/auth.js"></script>
     <script>
         const user = JSON.parse(sessionStorage.getItem('rattel_user'));
@@ -789,46 +792,56 @@
             document.getElementById('userNameHeader').textContent = userData.prenom;
         }
 
-        // File uploads storage
+        // File uploads storage (actual file objects for upload)
         const uploadedFiles = {
             identity: null,
             address: null,
             rib: null
         };
 
-        // Load existing document data
-        function loadDocumentData() {
-            const users = JSON.parse(localStorage.getItem('rattel_users') || '[]');
-            const currentUser = users.find(u => u.email === userData.email);
+        // Stored document metadata from Supabase
+        const storedDocs = {
+            identity: null,
+            address: null,
+            rib: null
+        };
 
-            if (currentUser?.documents) {
-                Object.keys(currentUser.documents).forEach(docType => {
-                    if (currentUser.documents[docType]) {
-                        const doc = currentUser.documents[docType];
-                        uploadedFiles[docType] = doc;
-                        showUploadedFile(docType, doc.name, doc.size);
-                    }
-                });
-            }
+        // Load existing document data from Supabase
+        async function loadDocumentData() {
+            try {
+                // Load profile to check completion status
+                const profile = await getProfile(userData.id);
 
-            // Update badges
-            if (currentUser?.profilComplete) {
-                document.getElementById('profilBadge').textContent = 'Complete';
-                document.getElementById('profilBadge').classList.remove('badge-pending');
-                document.getElementById('profilBadge').classList.add('badge-complete');
-            }
+                // Update badges based on profile
+                if (profile?.profil_complete) {
+                    document.getElementById('profilBadge').textContent = 'Complete';
+                    document.getElementById('profilBadge').classList.remove('badge-pending');
+                    document.getElementById('profilBadge').classList.add('badge-complete');
+                }
 
-            if (currentUser?.documentsComplete) {
-                document.getElementById('docsBadge').textContent = 'Complete';
-                document.getElementById('docsBadge').classList.remove('badge-pending');
-                document.getElementById('docsBadge').classList.add('badge-complete');
+                if (profile?.documents_complete) {
+                    document.getElementById('docsBadge').textContent = 'Complete';
+                    document.getElementById('docsBadge').classList.remove('badge-pending');
+                    document.getElementById('docsBadge').classList.add('badge-complete');
 
-                document.getElementById('verificationStatus').classList.remove('pending');
-                document.getElementById('verificationStatus').classList.add('verified');
-                document.getElementById('verificationStatus').innerHTML = `
-                    <h4>&#9989; Documents soumis</h4>
-                    <p>Vos documents ont ete soumis pour verification. Notre equipe les examinera sous 48h ouvrees. Vous recevrez une notification par email une fois la verification terminee.</p>
-                `;
+                    document.getElementById('verificationStatus').classList.remove('pending');
+                    document.getElementById('verificationStatus').classList.add('verified');
+                    document.getElementById('verificationStatus').innerHTML = `
+                        <h4>&#9989; Documents soumis</h4>
+                        <p>Vos documents ont ete soumis pour verification. Notre equipe les examinera sous 48h ouvrees. Vous recevrez une notification par email une fois la verification terminee.</p>
+                    `;
+                }
+
+                // Load documents from Supabase
+                const docs = await getUserDocuments(userData.id);
+                if (docs && docs.length > 0) {
+                    docs.forEach(doc => {
+                        storedDocs[doc.type] = doc;
+                        showUploadedFile(doc.type, doc.file_name, doc.file_size, doc.status);
+                    });
+                }
+            } catch (error) {
+                console.error('Error loading document data:', error);
             }
         }
 
@@ -842,7 +855,7 @@
         }
 
         // Show uploaded file
-        function showUploadedFile(type, name, size) {
+        function showUploadedFile(type, name, size, docStatus = 'uploaded') {
             const uploadZone = document.getElementById(type + 'UploadZone');
             const fileDisplay = document.getElementById(type + 'File');
             const fileName = document.getElementById(type + 'FileName');
@@ -854,8 +867,21 @@
             fileDisplay.style.display = 'flex';
             fileName.textContent = name;
             fileSize.textContent = formatFileSize(size);
-            status.textContent = 'Telecharge';
-            status.className = 'document-status status-uploaded';
+
+            // Set status based on document status from Supabase
+            if (docStatus === 'verified') {
+                status.textContent = 'Verifie';
+                status.className = 'document-status status-verified';
+            } else if (docStatus === 'rejected') {
+                status.textContent = 'Rejete';
+                status.className = 'document-status status-rejected';
+            } else if (docStatus === 'pending') {
+                status.textContent = 'En verification';
+                status.className = 'document-status status-uploaded';
+            } else {
+                status.textContent = 'Telecharge';
+                status.className = 'document-status status-uploaded';
+            }
             card.classList.add('complete');
         }
 
@@ -889,7 +915,8 @@
                         alert('Le fichier est trop volumineux (max 5 Mo)');
                         return;
                     }
-                    uploadedFiles[type] = { name: file.name, size: file.size };
+                    // Store actual file object for later upload
+                    uploadedFiles[type] = file;
                     showUploadedFile(type, file.name, file.size);
                 }
             });
@@ -914,15 +941,21 @@
                         alert('Le fichier est trop volumineux (max 5 Mo)');
                         return;
                     }
-                    uploadedFiles[type] = { name: file.name, size: file.size };
+                    // Store actual file object for later upload
+                    uploadedFiles[type] = file;
                     showUploadedFile(type, file.name, file.size);
                 }
             });
         });
 
         // Submit documents
-        function submitDocuments() {
-            if (!uploadedFiles.identity || !uploadedFiles.address || !uploadedFiles.rib) {
+        async function submitDocuments() {
+            // Check if all documents are either newly uploaded or already stored
+            const hasIdentity = uploadedFiles.identity || storedDocs.identity;
+            const hasAddress = uploadedFiles.address || storedDocs.address;
+            const hasRib = uploadedFiles.rib || storedDocs.rib;
+
+            if (!hasIdentity || !hasAddress || !hasRib) {
                 alert('Veuillez telecharger tous les documents requis');
                 return;
             }
@@ -931,25 +964,28 @@
             submitBtn.classList.add('loading');
             submitBtn.disabled = true;
 
-            // Save to localStorage
-            let users = JSON.parse(localStorage.getItem('rattel_users') || '[]');
-            const userIndex = users.findIndex(u => u.email === userData.email);
+            try {
+                // Upload new files to Supabase Storage
+                for (const docType of ['identity', 'address', 'rib']) {
+                    const file = uploadedFiles[docType];
+                    // Only upload if it's a new file (File object, not stored doc)
+                    if (file && file instanceof File) {
+                        // Upload to Supabase Storage
+                        const uploadResult = await uploadDocument(userData.id, docType, file);
 
-            if (userIndex !== -1) {
-                users[userIndex].documents = {
-                    identity: uploadedFiles.identity,
-                    address: uploadedFiles.address,
-                    rib: uploadedFiles.rib,
-                    submittedAt: new Date().toISOString()
-                };
-                users[userIndex].documentsComplete = true;
-                users[userIndex].status = 'pending_verification';
-                localStorage.setItem('rattel_users', JSON.stringify(users));
-            }
+                        // Save metadata to database
+                        await saveDocumentMetadata(
+                            userData.id,
+                            docType,
+                            file.name,
+                            uploadResult.path,
+                            file.size
+                        );
+                    }
+                }
 
-            setTimeout(() => {
-                submitBtn.classList.remove('loading');
-                submitBtn.disabled = false;
+                // Update profile to mark documents as complete
+                await updateProfile(userData.id, { documents_complete: true });
 
                 // Show success toast
                 const toast = document.getElementById('successToast');
@@ -976,7 +1012,14 @@
                     status.textContent = 'En verification';
                     status.className = 'document-status status-uploaded';
                 });
-            }, 1500);
+
+            } catch (error) {
+                console.error('Error uploading documents:', error);
+                alert('Erreur lors de l\'envoi des documents. Veuillez reessayer.');
+            } finally {
+                submitBtn.classList.remove('loading');
+                submitBtn.disabled = false;
+            }
         }
 
         // Mobile menu

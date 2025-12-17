@@ -216,6 +216,9 @@
     </style>
 </head>
 <body>
+    <!-- Supabase SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase.js"></script>
     <script src="js/auth.js"></script>
 
     <header class="admin-header">
@@ -274,96 +277,103 @@
     </div>
 
     <script>
-        function loadUsers() {
-            const users = JSON.parse(localStorage.getItem('rattel_users') || '[]');
+        // Store users globally for export
+        let allUsers = [];
+
+        async function loadUsers() {
             const tbody = document.getElementById('usersTable');
             const emptyState = document.getElementById('emptyState');
 
-            // Stats
-            document.getElementById('totalUsers').textContent = users.length;
-            document.getElementById('particuliers').textContent = users.filter(u => u.type === 'particulier').length;
-            document.getElementById('entreprises').textContent = users.filter(u => u.type === 'entreprise').length;
-            document.getElementById('newsletters').textContent = users.filter(u => u.newsletter).length;
+            try {
+                // Load from Supabase
+                const users = await getAllProfiles();
+                allUsers = users || [];
 
-            if (users.length === 0) {
-                tbody.innerHTML = '';
-                emptyState.style.display = 'block';
-                return;
-            }
+                // Stats
+                document.getElementById('totalUsers').textContent = allUsers.length;
+                document.getElementById('particuliers').textContent = allUsers.filter(u => u.type === 'particulier').length;
+                document.getElementById('entreprises').textContent = allUsers.filter(u => u.type === 'entreprise').length;
+                document.getElementById('newsletters').textContent = allUsers.filter(u => u.newsletter).length;
 
-            emptyState.style.display = 'none';
-
-            tbody.innerHTML = users.map((user, index) => {
-                const profilStatus = user.profilComplete ? '<span class="status-badge status-verified">✓</span>' : '<span class="status-badge status-incomplete">-</span>';
-                const docsStatus = user.documentsComplete ? '<span class="status-badge status-verified">✓</span>' : '<span class="status-badge status-incomplete">-</span>';
-
-                let statusBadge = '<span class="status-badge status-incomplete">Incomplet</span>';
-                if (user.status === 'verified') {
-                    statusBadge = '<span class="status-badge status-verified">Verifie</span>';
-                } else if (user.profilComplete && user.documentsComplete) {
-                    statusBadge = '<span class="status-badge status-pending">En attente</span>';
+                if (allUsers.length === 0) {
+                    tbody.innerHTML = '';
+                    emptyState.style.display = 'block';
+                    return;
                 }
 
-                const verifyBtn = (user.profilComplete && user.documentsComplete && user.status !== 'verified')
-                    ? `<button class="btn-success" onclick="verifyUser(${index})">Verifier</button>`
-                    : '';
+                emptyState.style.display = 'none';
 
-                return `
-                    <tr>
-                        <td>${new Date(user.createdAt).toLocaleDateString('fr-FR')}</td>
-                        <td><span class="badge badge-${user.type}">${user.type}</span></td>
-                        <td>${user.civilite || ''} ${user.prenom || ''} ${user.nom || ''}</td>
-                        <td>${user.email}</td>
-                        <td>${user.telephone || '-'}</td>
-                        <td>${profilStatus}</td>
-                        <td>${docsStatus}</td>
-                        <td>${statusBadge}</td>
-                        <td>${verifyBtn}<button class="btn-danger" onclick="deleteUser(${index})">Supprimer</button></td>
-                    </tr>
-                `;
-            }).join('');
-        }
+                tbody.innerHTML = allUsers.map((user) => {
+                    const profilStatus = user.profil_complete ? '<span class="status-badge status-verified">✓</span>' : '<span class="status-badge status-incomplete">-</span>';
+                    const docsStatus = user.documents_complete ? '<span class="status-badge status-verified">✓</span>' : '<span class="status-badge status-incomplete">-</span>';
 
-        function deleteUser(index) {
-            if (confirm('Supprimer cet utilisateur ?')) {
-                const users = JSON.parse(localStorage.getItem('rattel_users') || '[]');
-                users.splice(index, 1);
-                localStorage.setItem('rattel_users', JSON.stringify(users));
-                loadUsers();
+                    let statusBadge = '<span class="status-badge status-incomplete">Incomplet</span>';
+                    if (user.status === 'verified') {
+                        statusBadge = '<span class="status-badge status-verified">Verifie</span>';
+                    } else if (user.profil_complete && user.documents_complete) {
+                        statusBadge = '<span class="status-badge status-pending">En attente</span>';
+                    }
+
+                    const verifyBtn = (user.profil_complete && user.documents_complete && user.status !== 'verified')
+                        ? `<button class="btn-success" onclick="verifyUser('${user.id}')">Verifier</button>`
+                        : '';
+
+                    const createdDate = user.created_at ? new Date(user.created_at).toLocaleDateString('fr-FR') : '-';
+
+                    return `
+                        <tr>
+                            <td>${createdDate}</td>
+                            <td><span class="badge badge-${user.type || 'particulier'}">${user.type || 'particulier'}</span></td>
+                            <td>${user.civilite || ''} ${user.prenom || ''} ${user.nom || ''}</td>
+                            <td>${user.email || '-'}</td>
+                            <td>${user.telephone || '-'}</td>
+                            <td>${profilStatus}</td>
+                            <td>${docsStatus}</td>
+                            <td>${statusBadge}</td>
+                            <td>${verifyBtn}</td>
+                        </tr>
+                    `;
+                }).join('');
+
+            } catch (error) {
+                console.error('Error loading users:', error);
+                tbody.innerHTML = '<tr><td colspan="9" style="text-align: center; color: #666;">Erreur de chargement des donnees</td></tr>';
             }
         }
 
-        function verifyUser(index) {
+        async function verifyUser(userId) {
             if (confirm('Valider la verification de cet utilisateur ?')) {
-                const users = JSON.parse(localStorage.getItem('rattel_users') || '[]');
-                users[index].status = 'verified';
-                users[index].verifiedAt = new Date().toISOString();
-                localStorage.setItem('rattel_users', JSON.stringify(users));
-                loadUsers();
+                try {
+                    await updateUserStatus(userId, 'verified');
+                    loadUsers();
+                } catch (error) {
+                    console.error('Error verifying user:', error);
+                    alert('Erreur lors de la verification');
+                }
             }
         }
 
         function exportCSV() {
-            const users = JSON.parse(localStorage.getItem('rattel_users') || '[]');
-            if (users.length === 0) {
+            if (allUsers.length === 0) {
                 alert('Aucune donnee a exporter');
                 return;
             }
 
-            const headers = ['Date', 'Type', 'Civilite', 'Nom', 'Prenom', 'Email', 'Telephone', 'Adresse', 'Code Postal', 'Ville', 'Newsletter', 'Parrain'];
-            const rows = users.map(u => [
-                new Date(u.createdAt).toLocaleDateString('fr-FR'),
-                u.type,
-                u.civilite,
-                u.nom,
-                u.prenom,
-                u.email,
-                u.telephone,
-                u.adresse,
-                u.codePostal,
-                u.ville,
+            const headers = ['Date', 'Type', 'Civilite', 'Nom', 'Prenom', 'Email', 'Telephone', 'Adresse', 'Code Postal', 'Ville', 'Newsletter', 'Parrain', 'Statut'];
+            const rows = allUsers.map(u => [
+                u.created_at ? new Date(u.created_at).toLocaleDateString('fr-FR') : '',
+                u.type || '',
+                u.civilite || '',
+                u.nom || '',
+                u.prenom || '',
+                u.email || '',
+                u.telephone || '',
+                u.adresse || '',
+                u.code_postal || '',
+                u.ville || '',
                 u.newsletter ? 'Oui' : 'Non',
-                u.referral || ''
+                u.referral || '',
+                u.status || 'pending'
             ]);
 
             const csv = [headers, ...rows].map(row => row.join(';')).join('\n');

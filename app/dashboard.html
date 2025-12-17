@@ -239,6 +239,9 @@
     </style>
 </head>
 <body>
+    <!-- Supabase SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase.js"></script>
     <script src="js/auth.js"></script>
     <script>
         // Check if user is logged in
@@ -378,87 +381,98 @@
             document.getElementById('userNameHeader').textContent = userData.prenom;
         }
 
-        // Load user verification status
-        function loadVerificationStatus() {
-            const users = JSON.parse(localStorage.getItem('rattel_users') || '[]');
-            const currentUser = users.find(u => u.email === userData.email);
+        // Load user verification status from Supabase
+        async function loadVerificationStatus() {
             const verificationContent = document.getElementById('verificationContent');
 
-            if (!currentUser) {
+            try {
+                // Load profile from Supabase
+                const profile = await getProfile(userData.id);
+
+                if (!profile) {
+                    verificationContent.innerHTML = `
+                        <div class="status-box pending">
+                            <strong>En attente</strong>
+                            <p>Veuillez completer votre profil pour commencer a investir.</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                const profilComplete = profile.profil_complete || false;
+                const documentsComplete = profile.documents_complete || false;
+                const isVerified = profile.status === 'verified';
+
+                // Update checklist
+                if (profilComplete) {
+                    const profilCheck = document.querySelector('#checkProfil .check-icon');
+                    profilCheck.classList.remove('pending');
+                    profilCheck.classList.add('complete');
+                    profilCheck.textContent = '✓';
+                    document.getElementById('profilAction').textContent = 'Modifier →';
+                }
+
+                if (documentsComplete) {
+                    const docsCheck = document.querySelector('#checkDocs .check-icon');
+                    docsCheck.classList.remove('pending');
+                    docsCheck.classList.add('complete');
+                    docsCheck.textContent = '✓';
+                    document.getElementById('docsAction').textContent = 'Voir →';
+                }
+
+                if (isVerified) {
+                    const verifiedCheck = document.querySelector('#checkVerified .check-icon');
+                    verifiedCheck.classList.remove('pending');
+                    verifiedCheck.classList.add('complete');
+                    verifiedCheck.textContent = '✓';
+                }
+
+                // Update verification status box
+                if (isVerified) {
+                    verificationContent.innerHTML = `
+                        <div class="status-box complete">
+                            <strong>Compte verifie</strong>
+                            <p>Votre compte est verifie. Vous pouvez investir sur tous les projets disponibles.</p>
+                        </div>
+                        <a href="projets.html" class="btn-primary btn-small" style="display: inline-block; text-decoration: none;">
+                            Voir les projets
+                        </a>
+                    `;
+                } else if (profilComplete && documentsComplete) {
+                    verificationContent.innerHTML = `
+                        <div class="status-box pending">
+                            <strong>En cours de verification</strong>
+                            <p>Vos documents sont en cours d'examen. Vous serez notifie par email sous 48h ouvrees.</p>
+                        </div>
+                    `;
+                } else if (!profilComplete) {
+                    verificationContent.innerHTML = `
+                        <div class="status-box pending">
+                            <strong>Profil incomplet</strong>
+                            <p>Completez votre profil investisseur pour pouvoir investir.</p>
+                        </div>
+                        <a href="profil.html" class="btn-primary btn-small" style="display: inline-block; text-decoration: none;">
+                            Completer mon profil
+                        </a>
+                    `;
+                } else {
+                    verificationContent.innerHTML = `
+                        <div class="status-box pending">
+                            <strong>Documents manquants</strong>
+                            <p>Telechargez vos documents justificatifs pour finaliser la verification.</p>
+                        </div>
+                        <a href="documents.html" class="btn-primary btn-small" style="display: inline-block; text-decoration: none;">
+                            Telecharger mes documents
+                        </a>
+                    `;
+                }
+            } catch (error) {
+                console.error('Error loading verification status:', error);
                 verificationContent.innerHTML = `
                     <div class="status-box pending">
-                        <strong>En attente</strong>
-                        <p>Veuillez completer votre profil pour commencer a investir.</p>
+                        <strong>Erreur de chargement</strong>
+                        <p>Impossible de charger votre statut. Veuillez rafraichir la page.</p>
                     </div>
-                `;
-                return;
-            }
-
-            const profilComplete = currentUser.profilComplete || false;
-            const documentsComplete = currentUser.documentsComplete || false;
-            const isVerified = currentUser.status === 'verified';
-
-            // Update checklist
-            if (profilComplete) {
-                const profilCheck = document.querySelector('#checkProfil .check-icon');
-                profilCheck.classList.remove('pending');
-                profilCheck.classList.add('complete');
-                profilCheck.textContent = '✓';
-                document.getElementById('profilAction').textContent = 'Modifier →';
-            }
-
-            if (documentsComplete) {
-                const docsCheck = document.querySelector('#checkDocs .check-icon');
-                docsCheck.classList.remove('pending');
-                docsCheck.classList.add('complete');
-                docsCheck.textContent = '✓';
-                document.getElementById('docsAction').textContent = 'Voir →';
-            }
-
-            if (isVerified) {
-                const verifiedCheck = document.querySelector('#checkVerified .check-icon');
-                verifiedCheck.classList.remove('pending');
-                verifiedCheck.classList.add('complete');
-                verifiedCheck.textContent = '✓';
-            }
-
-            // Update verification status box
-            if (isVerified) {
-                verificationContent.innerHTML = `
-                    <div class="status-box complete">
-                        <strong>Compte verifie</strong>
-                        <p>Votre compte est verifie. Vous pouvez investir sur tous les projets disponibles.</p>
-                    </div>
-                    <a href="projets.html" class="btn-primary btn-small" style="display: inline-block; text-decoration: none;">
-                        Voir les projets
-                    </a>
-                `;
-            } else if (profilComplete && documentsComplete) {
-                verificationContent.innerHTML = `
-                    <div class="status-box pending">
-                        <strong>En cours de verification</strong>
-                        <p>Vos documents sont en cours d'examen. Vous serez notifie par email sous 48h ouvrees.</p>
-                    </div>
-                `;
-            } else if (!profilComplete) {
-                verificationContent.innerHTML = `
-                    <div class="status-box pending">
-                        <strong>Profil incomplet</strong>
-                        <p>Completez votre profil investisseur pour pouvoir investir.</p>
-                    </div>
-                    <a href="profil.html" class="btn-primary btn-small" style="display: inline-block; text-decoration: none;">
-                        Completer mon profil
-                    </a>
-                `;
-            } else {
-                verificationContent.innerHTML = `
-                    <div class="status-box pending">
-                        <strong>Documents manquants</strong>
-                        <p>Telechargez vos documents justificatifs pour finaliser la verification.</p>
-                    </div>
-                    <a href="documents.html" class="btn-primary btn-small" style="display: inline-block; text-decoration: none;">
-                        Telecharger mes documents
-                    </a>
                 `;
             }
         }

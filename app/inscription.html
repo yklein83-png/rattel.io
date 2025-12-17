@@ -489,7 +489,9 @@
     </style>
 </head>
 <body>
-    <script src="js/auth.js"></script>
+    <!-- Supabase SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase.js"></script>
 
     <div class="container">
         <div class="logo">
@@ -772,7 +774,7 @@
             window.scrollTo(0, 0);
         }
 
-        function nextStep(current) {
+        async function nextStep(current) {
             if (current === 1) {
                 const email = document.getElementById('email').value;
                 const pass = document.getElementById('password').value;
@@ -788,13 +790,6 @@
                 }
                 if (pass !== confirmPass) {
                     alert('Les mots de passe ne correspondent pas');
-                    return;
-                }
-
-                // Check if email exists
-                const users = JSON.parse(localStorage.getItem('rattel_users') || '[]');
-                if (users.some(u => u.email === email)) {
-                    alert('Cette adresse email est deja utilisee');
                     return;
                 }
             }
@@ -818,8 +813,8 @@
             showStep(currentStep);
         }
 
-        // Form Submission
-        document.getElementById('registrationForm').addEventListener('submit', function(e) {
+        // Form Submission with Supabase
+        document.getElementById('registrationForm').addEventListener('submit', async function(e) {
             e.preventDefault();
 
             if (!document.getElementById('terms').checked || !document.getElementById('rgpd').checked || !document.getElementById('risques').checked) {
@@ -831,37 +826,59 @@
             submitBtn.classList.add('loading');
             submitBtn.disabled = true;
 
-            const formData = {
-                type: document.querySelector('.account-card.selected').dataset.type,
-                email: document.getElementById('email').value,
-                password: document.getElementById('password').value,
-                civilite: document.getElementById('civilite').value,
-                nom: document.getElementById('nom').value,
-                prenom: document.getElementById('prenom').value,
-                dateNaissance: document.getElementById('dateNaissance').value,
-                lieuNaissance: document.getElementById('lieuNaissance').value,
-                nationalite: document.getElementById('nationalite').value,
-                telephone: document.getElementById('telephone').value,
-                adresse: document.getElementById('adresse').value,
-                codePostal: document.getElementById('codePostal').value,
-                ville: document.getElementById('ville').value,
-                profession: document.getElementById('profession').value,
-                referral: document.getElementById('referral').value,
-                newsletter: document.getElementById('newsletter').checked,
-                profilComplete: false,
-                documentsComplete: false,
-                status: 'pending',
-                createdAt: new Date().toISOString()
-            };
+            const email = document.getElementById('email').value;
+            const pass = document.getElementById('password').value;
 
-            let users = JSON.parse(localStorage.getItem('rattel_users') || '[]');
-            users.push(formData);
-            localStorage.setItem('rattel_users', JSON.stringify(users));
+            try {
+                // 1. Create auth user in Supabase
+                const authData = await signUp(email, pass);
 
-            setTimeout(() => {
+                if (!authData.user) {
+                    throw new Error('Erreur lors de la creation du compte');
+                }
+
+                // 2. Create profile in database
+                const profileData = {
+                    type: document.querySelector('.account-card.selected').dataset.type,
+                    civilite: document.getElementById('civilite').value,
+                    nom: document.getElementById('nom').value,
+                    prenom: document.getElementById('prenom').value,
+                    date_naissance: document.getElementById('dateNaissance').value,
+                    lieu_naissance: document.getElementById('lieuNaissance').value,
+                    nationalite: document.getElementById('nationalite').value,
+                    telephone: document.getElementById('telephone').value,
+                    adresse: document.getElementById('adresse').value,
+                    code_postal: document.getElementById('codePostal').value,
+                    ville: document.getElementById('ville').value,
+                    profession: document.getElementById('profession').value,
+                    referral: document.getElementById('referral').value || null,
+                    newsletter: document.getElementById('newsletter').checked,
+                    profil_complete: false,
+                    documents_complete: false,
+                    status: 'pending'
+                };
+
+                await createProfile(authData.user.id, profileData);
+
                 submitBtn.classList.remove('loading');
                 showStep('success');
-            }, 1500);
+
+            } catch (error) {
+                submitBtn.classList.remove('loading');
+                submitBtn.disabled = false;
+
+                let errorMessage = 'Erreur lors de l\'inscription';
+                if (error.message.includes('already registered')) {
+                    errorMessage = 'Cette adresse email est deja utilisee';
+                } else if (error.message.includes('Invalid email')) {
+                    errorMessage = 'Adresse email invalide';
+                } else if (error.message.includes('Password')) {
+                    errorMessage = 'Le mot de passe doit contenir au moins 6 caracteres';
+                }
+
+                alert(errorMessage);
+                console.error('Registration error:', error);
+            }
         });
     </script>
 </body>

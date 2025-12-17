@@ -252,6 +252,9 @@
     </style>
 </head>
 <body>
+    <!-- Supabase SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase.js"></script>
     <script src="js/auth.js"></script>
 
     <div class="container">
@@ -302,7 +305,7 @@
     </div>
 
     <script>
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
             e.preventDefault();
 
             const email = document.getElementById('email').value;
@@ -314,27 +317,34 @@
             submitBtn.classList.add('loading');
             submitBtn.disabled = true;
 
-            // Simulate API call
-            setTimeout(() => {
-                // Check credentials against localStorage
-                const users = JSON.parse(localStorage.getItem('rattel_users') || '[]');
-                const user = users.find(u => u.email === email && u.password === password);
+            try {
+                // Sign in with Supabase
+                const authData = await signIn(email, password);
 
-                if (user) {
-                    // Store logged in user
-                    sessionStorage.setItem('rattel_user', JSON.stringify({
-                        email: user.email,
-                        nom: user.nom,
-                        prenom: user.prenom
-                    }));
-                    // Redirect to dashboard
-                    window.location.href = 'dashboard.html';
-                } else {
-                    errorDiv.classList.add('show');
-                    submitBtn.classList.remove('loading');
-                    submitBtn.disabled = false;
-                }
-            }, 1000);
+                // Get user profile from Supabase
+                const profile = await getProfile(authData.user.id);
+
+                // Store session info for quick access
+                sessionStorage.setItem('rattel_user', JSON.stringify({
+                    id: authData.user.id,
+                    email: authData.user.email,
+                    nom: profile?.nom || '',
+                    prenom: profile?.prenom || '',
+                    status: profile?.status || 'pending'
+                }));
+
+                // Redirect to dashboard
+                window.location.href = 'dashboard.html';
+
+            } catch (error) {
+                console.error('Login error:', error);
+                errorDiv.textContent = error.message === 'Invalid login credentials'
+                    ? 'Email ou mot de passe incorrect'
+                    : 'Erreur de connexion. Veuillez reessayer.';
+                errorDiv.classList.add('show');
+                submitBtn.classList.remove('loading');
+                submitBtn.disabled = false;
+            }
         });
     </script>
 </body>

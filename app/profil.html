@@ -509,6 +509,9 @@
     </style>
 </head>
 <body>
+    <!-- Supabase SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase.js"></script>
     <script src="js/auth.js"></script>
     <script>
         const user = JSON.parse(sessionStorage.getItem('rattel_user'));
@@ -857,68 +860,75 @@
             document.getElementById('userNameHeader').textContent = userData.prenom;
         }
 
-        // Load existing profile data
-        function loadProfileData() {
-            const users = JSON.parse(localStorage.getItem('rattel_users') || '[]');
-            const currentUser = users.find(u => u.email === userData.email);
+        // Load existing profile data from Supabase
+        async function loadProfileData() {
+            try {
+                const profile = await getProfile(userData.id);
 
-            if (currentUser && currentUser.profil) {
-                const profil = currentUser.profil;
-
-                // Experience level
-                if (profil.experience) {
-                    document.querySelector(`.experience-card[data-level="${profil.experience}"]`)?.classList.add('selected');
-                }
-
-                // Investments
-                if (profil.investments) {
-                    profil.investments.forEach(inv => {
-                        const checkbox = document.querySelector(`input[name="investments"][value="${inv}"]`);
-                        if (checkbox) {
-                            checkbox.checked = true;
-                            checkbox.closest('.investment-checkbox').classList.add('checked');
-                        }
-                    });
-                }
-
-                // Selects
-                ['revenus', 'patrimoine', 'epargne', 'montantInvestir', 'horizon'].forEach(field => {
-                    if (profil[field]) {
-                        document.getElementById(field).value = profil[field];
+                if (profile) {
+                    // Experience level
+                    if (profile.experience) {
+                        document.querySelector(`.experience-card[data-level="${profile.experience}"]`)?.classList.add('selected');
                     }
-                });
 
-                // Objectives
-                if (profil.objectifs) {
-                    profil.objectifs.forEach(obj => {
-                        const checkbox = document.querySelector(`input[name="objectifs"][value="${obj}"]`);
-                        if (checkbox) {
-                            checkbox.checked = true;
-                            checkbox.closest('.objective-item').classList.add('checked');
-                        }
-                    });
+                    // Investments (stored as JSON array)
+                    if (profile.investments) {
+                        const investments = typeof profile.investments === 'string'
+                            ? JSON.parse(profile.investments)
+                            : profile.investments;
+                        investments.forEach(inv => {
+                            const checkbox = document.querySelector(`input[name="investments"][value="${inv}"]`);
+                            if (checkbox) {
+                                checkbox.checked = true;
+                                checkbox.closest('.investment-checkbox').classList.add('checked');
+                            }
+                        });
+                    }
+
+                    // Selects
+                    if (profile.revenus) document.getElementById('revenus').value = profile.revenus;
+                    if (profile.patrimoine) document.getElementById('patrimoine').value = profile.patrimoine;
+                    if (profile.epargne) document.getElementById('epargne').value = profile.epargne;
+                    if (profile.montant_investir) document.getElementById('montantInvestir').value = profile.montant_investir;
+                    if (profile.horizon) document.getElementById('horizon').value = profile.horizon;
+
+                    // Objectives (stored as JSON array)
+                    if (profile.objectifs) {
+                        const objectifs = typeof profile.objectifs === 'string'
+                            ? JSON.parse(profile.objectifs)
+                            : profile.objectifs;
+                        objectifs.forEach(obj => {
+                            const checkbox = document.querySelector(`input[name="objectifs"][value="${obj}"]`);
+                            if (checkbox) {
+                                checkbox.checked = true;
+                                checkbox.closest('.objective-item').classList.add('checked');
+                            }
+                        });
+                    }
+
+                    // Risk checkboxes
+                    if (profile.risques_acceptes) {
+                        document.getElementById('risque1').checked = true;
+                        document.getElementById('risque2').checked = true;
+                        document.getElementById('risque3').checked = true;
+                        document.getElementById('risque4').checked = true;
+                    }
+
+                    // Update badges
+                    if (profile.profil_complete) {
+                        document.getElementById('profilBadge').textContent = 'Complete';
+                        document.getElementById('profilBadge').classList.remove('badge-pending');
+                        document.getElementById('profilBadge').classList.add('badge-complete');
+                    }
+
+                    if (profile.documents_complete) {
+                        document.getElementById('docsBadge').textContent = 'Complete';
+                        document.getElementById('docsBadge').classList.remove('badge-pending');
+                        document.getElementById('docsBadge').classList.add('badge-complete');
+                    }
                 }
-
-                // Risk checkboxes
-                if (profil.risquesAcceptes) {
-                    document.getElementById('risque1').checked = true;
-                    document.getElementById('risque2').checked = true;
-                    document.getElementById('risque3').checked = true;
-                    document.getElementById('risque4').checked = true;
-                }
-            }
-
-            // Update badges
-            if (currentUser?.profilComplete) {
-                document.getElementById('profilBadge').textContent = 'Complete';
-                document.getElementById('profilBadge').classList.remove('badge-pending');
-                document.getElementById('profilBadge').classList.add('badge-complete');
-            }
-
-            if (currentUser?.documentsComplete) {
-                document.getElementById('docsBadge').textContent = 'Complete';
-                document.getElementById('docsBadge').classList.remove('badge-pending');
-                document.getElementById('docsBadge').classList.add('badge-complete');
+            } catch (error) {
+                console.error('Error loading profile:', error);
             }
         }
 
@@ -982,7 +992,7 @@
         }
 
         // Form submission
-        document.getElementById('profilForm').addEventListener('submit', function(e) {
+        document.getElementById('profilForm').addEventListener('submit', async function(e) {
             e.preventDefault();
 
             // Validation
@@ -1022,32 +1032,23 @@
             const investments = Array.from(document.querySelectorAll('input[name="investments"]:checked')).map(cb => cb.value);
             const objectifsList = Array.from(objectives).map(cb => cb.value);
 
+            // Profile data with snake_case for Supabase
             const profileData = {
                 experience: selectedExperience.dataset.level,
                 investments: investments,
                 revenus: document.getElementById('revenus').value,
                 patrimoine: document.getElementById('patrimoine').value,
                 epargne: document.getElementById('epargne').value,
-                montantInvestir: document.getElementById('montantInvestir').value,
+                montant_investir: document.getElementById('montantInvestir').value,
                 objectifs: objectifsList,
                 horizon: document.getElementById('horizon').value,
-                risquesAcceptes: true,
-                updatedAt: new Date().toISOString()
+                risques_acceptes: true,
+                profil_complete: true
             };
 
-            // Save to localStorage
-            let users = JSON.parse(localStorage.getItem('rattel_users') || '[]');
-            const userIndex = users.findIndex(u => u.email === userData.email);
-
-            if (userIndex !== -1) {
-                users[userIndex].profil = profileData;
-                users[userIndex].profilComplete = true;
-                localStorage.setItem('rattel_users', JSON.stringify(users));
-            }
-
-            setTimeout(() => {
-                submitBtn.classList.remove('loading');
-                submitBtn.disabled = false;
+            try {
+                // Save to Supabase
+                await updateProfile(userData.id, profileData);
 
                 // Show success toast
                 const toast = document.getElementById('successToast');
@@ -1060,7 +1061,14 @@
                 document.getElementById('profilBadge').textContent = 'Complete';
                 document.getElementById('profilBadge').classList.remove('badge-pending');
                 document.getElementById('profilBadge').classList.add('badge-complete');
-            }, 1000);
+
+            } catch (error) {
+                console.error('Error saving profile:', error);
+                alert('Erreur lors de l\'enregistrement. Veuillez reessayer.');
+            } finally {
+                submitBtn.classList.remove('loading');
+                submitBtn.disabled = false;
+            }
         });
     </script>
 </body>
