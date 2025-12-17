@@ -18,11 +18,12 @@
     --warning: #FF9800;
     --danger: #E94560;
 
-    /* Light mode (default) */
+    /* Light mode (default) - matches reference */
     --text-dark: #2c2c2c;
     --text-light: #666;
     --bg-light: #f8f9fa;
     --white: #ffffff;
+    --body-bg: #f8f9fa;
     --shadow: 0 10px 30px rgba(0,0,0,0.1);
     --shadow-hover: 0 15px 40px rgba(0,0,0,0.15);
 }
@@ -31,6 +32,7 @@
 [data-theme="dark"] {
     --bg-light: #252538;
     --white: #1e1e2f;
+    --body-bg: #121220;
     --text-dark: #e0e0e0;
     --text-light: #a0a0a0;
     --shadow: 0 10px 30px rgba(0,0,0,0.3);
