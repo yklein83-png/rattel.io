@@ -38,6 +38,14 @@
         const formData = new FormData(this);
         const email = formData.get('email');
 
+        // Anti-bot check 0: Cloudflare Turnstile
+        const turnstileResponse = formData.get('cf-turnstile-response');
+        if (!turnstileResponse) {
+            formMessage.textContent = 'Veuillez completer la verification anti-robot.';
+            formMessage.style.color = '#E94560';
+            return;
+        }
+
         // Anti-bot check 1: Honeypot
         if (formData.get('botcheck')) {
             console.log('Bot detected: honeypot');
