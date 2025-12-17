@@ -38,13 +38,9 @@
         const formData = new FormData(this);
         const email = formData.get('email');
 
-        // Anti-bot check 0: Cloudflare Turnstile
+        // Anti-bot check 0: Cloudflare Turnstile (optional - skip if not loaded)
         const turnstileResponse = formData.get('cf-turnstile-response');
-        if (!turnstileResponse) {
-            formMessage.textContent = 'Veuillez completer la verification anti-robot.';
-            formMessage.style.color = '#E94560';
-            return;
-        }
+        // Turnstile runs in background, no blocking if not available
 
         // Anti-bot check 1: Honeypot
         if (formData.get('botcheck')) {
