@@ -132,7 +132,7 @@
         <div class="header-top">
             <div class="container">
                 <span>contact@rattel.io | +687 XX.XX.XX</span>
-                <div><a href="#" onclick="rattelLogout(); return false;">Deconnexion</a></div>
+                <div id="headerTopRight"><a href="connexion.html">Se connecter</a></div>
             </div>
         </div>
         <nav>
@@ -144,8 +144,9 @@
                     <li><a href="comment-ca-marche.html">Comment ca marche</a></li>
                     <li><a href="se-financer.html">Se financer</a></li>
                     <li><a href="a-propos.html" class="active">A propos</a></li>
+                    <li id="navMonEspace" style="display:none;"><a href="dashboard.html">Mon espace</a></li>
                 </ul>
-                <div class="nav-actions">
+                <div class="nav-actions" id="navActions">
                     <a href="connexion.html" class="btn-nav-outline">Se connecter</a>
                     <a href="inscription.html" class="btn-nav">Creer un compte</a>
                 </div>
@@ -273,6 +274,24 @@
         document.getElementById('mobileMenuToggle').addEventListener('click', function() {
             document.getElementById('navMenu').classList.toggle('active');
         });
+
+        // Check if user is logged in and adapt header
+        (function() {
+            const user = JSON.parse(sessionStorage.getItem('rattel_user'));
+            if (user) {
+                document.getElementById('navMonEspace').style.display = 'block';
+                document.getElementById('navActions').innerHTML =
+                    '<a href="dashboard.html" class="btn-nav">Mon espace</a>';
+                document.getElementById('headerTopRight').innerHTML =
+                    '<span style="margin-right: 1rem;">' + user.prenom + '</span>' +
+                    '<a href="#" onclick="logout(); return false;">Deconnexion</a>';
+            }
+        })();
+
+        function logout() {
+            sessionStorage.removeItem('rattel_user');
+            window.location.reload();
+        }
     </script>
 </body>
 </html>
