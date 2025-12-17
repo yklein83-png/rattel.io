@@ -21,6 +21,7 @@
     /* Light mode (default) - matches reference */
     --text-dark: #2c2c2c;
     --text-light: #666;
+    --text-white: #ffffff;
     --bg-light: #f8f9fa;
     --white: #ffffff;
     --body-bg: #f8f9fa;
@@ -61,7 +62,7 @@ header {
 
 .header-top {
     background: var(--primary-dark);
-    color: var(--white);
+    color: var(--text-white);
     padding: 0.5rem 0;
     font-size: 0.85rem;
 }
@@ -73,7 +74,7 @@ header {
 }
 
 .header-top a {
-    color: var(--white);
+    color: var(--text-white);
     text-decoration: none;
     margin-left: 1.5rem;
     transition: color 0.3s;
@@ -144,7 +145,7 @@ nav .container {
 
 .btn-nav {
     background: linear-gradient(135deg, var(--primary-orange), var(--accent));
-    color: var(--white);
+    color: var(--text-white);
     padding: 0.7rem 1.5rem;
     border-radius: 25px;
     text-decoration: none;
@@ -173,7 +174,7 @@ nav .container {
 
 .btn-nav-outline:hover {
     background: var(--primary-orange);
-    color: var(--white);
+    color: var(--text-white);
 }
 
 /* ============================================
@@ -190,7 +191,7 @@ nav .container {
    ============================================ */
 .hero {
     background: linear-gradient(135deg, var(--primary-dark) 0%, var(--secondary-blue) 100%);
-    color: var(--white);
+    color: var(--text-white);
     padding: 5rem 0;
     text-align: center;
     position: relative;
@@ -248,7 +249,7 @@ nav .container {
    ============================================ */
 .btn-primary {
     background: linear-gradient(135deg, var(--primary-orange), var(--accent));
-    color: var(--white);
+    color: var(--text-white);
     padding: 1rem 2.5rem;
     border-radius: 30px;
     text-decoration: none;
@@ -267,13 +268,13 @@ nav .container {
 
 .btn-secondary {
     background: transparent;
-    color: var(--white);
+    color: var(--text-white);
     padding: 1rem 2.5rem;
     border-radius: 30px;
     text-decoration: none;
     font-weight: 600;
     font-size: 1.1rem;
-    border: 2px solid var(--white);
+    border: 2px solid var(--text-white);
     transition: all 0.3s;
     display: inline-block;
 }
@@ -397,7 +398,7 @@ nav .container {
     justify-content: center;
     margin: 0 auto 1.5rem;
     font-size: 1.5rem;
-    color: var(--white);
+    color: var(--text-white);
 }
 
 .feature-title {
@@ -450,7 +451,7 @@ nav .container {
 .tab-btn.active,
 .tab-btn:hover {
     background: var(--primary-orange);
-    color: var(--white);
+    color: var(--text-white);
 }
 
 .projects-grid {
@@ -494,7 +495,7 @@ nav .container {
     top: 1rem;
     right: 1rem;
     background: var(--primary-orange);
-    color: var(--white);
+    color: var(--text-white);
     padding: 0.3rem 1rem;
     border-radius: 20px;
     font-size: 0.85rem;
@@ -590,7 +591,7 @@ nav .container {
     text-align: center;
     padding: 0.8rem;
     background: var(--primary-dark);
-    color: var(--white);
+    color: var(--text-white);
     text-decoration: none;
     font-weight: 600;
     transition: all 0.3s;
@@ -606,7 +607,7 @@ nav .container {
 .cta-section {
     padding: 5rem 0;
     background: linear-gradient(135deg, var(--primary-orange), var(--accent));
-    color: var(--white);
+    color: var(--text-white);
     text-align: center;
 }
 
@@ -629,7 +630,7 @@ nav .container {
    ============================================ */
 footer {
     background: var(--primary-dark);
-    color: var(--white);
+    color: var(--text-white);
     padding: 3rem 0 1rem;
 }
 
@@ -693,7 +694,7 @@ footer {
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--white);
+    color: var(--text-white);
     text-decoration: none;
     transition: all 0.3s;
     font-size: 0.9rem;
