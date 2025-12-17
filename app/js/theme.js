@@ -1,6 +1,7 @@
 /**
  * Theme Toggle for RATTEL
  * Handles dark/light mode switching with localStorage persistence
+ * Light mode is default, dark mode uses [data-theme="dark"]
  */
 (function() {
     'use strict';
