@@ -38,10 +38,6 @@
         const formData = new FormData(this);
         const email = formData.get('email');
 
-        // Anti-bot check 0: Cloudflare Turnstile (optional - skip if not loaded)
-        const turnstileResponse = formData.get('cf-turnstile-response');
-        // Turnstile runs in background, no blocking if not available
-
         // Anti-bot check 1: Honeypot
         if (formData.get('botcheck')) {
             console.log('Bot detected: honeypot');
